@@ -1,0 +1,58 @@
+<div class="modal-body">
+  <div class="modal-header">
+    <h2 class="modal-header-title">
+      <i class="fa fa-info-circle"></i>
+      <span class="p-l-1">Add Product</span>
+    </h2>
+
+    <a class="modal-header-close" ng-click="dismiss();">
+      <i class="fa fa-remove"></i>
+    </a>
+  </div>
+
+  <form class="form" id="master-data-product-form">
+    <div class="modal-content" id="modal-modal-content">
+      <div class="text-left">
+        <div>
+          <div class="left-group" style="float:left">
+            <p style="margin: 20px 0px 0px 25px">Product ID:</p>
+            <div>
+                <input style=" width:130px; margin: 0px 0px 0px 23px" id="master-data-product-id-input" class="md-products-datalist-input" type="number" name="product-id" ng-value="{{model.id}}" placeholder="Please enter ID">
+            </div>
+          </div>
+
+          <div class="right-group" style="float:right">
+            <p style="margin: 20px 65px 0px 5px">Product Description:</p>
+            <div>
+                <input style=" width:260px; margin: 0px 23px 0px 0px" id="master-data-product-desc-input" class="md-products-datalist-input" maxlength="50" type="text" name="product-description" value="{{model.desc}}" placeholder="Please enter Product Desc">
+            </div>
+          </div>
+        </div>
+        <div class="clearfix"></div>
+      </div>
+
+      <div class="custom-separator" style="margin-top:30px"></div>
+
+      <div class="button-wrapper" style="text-align:center; margin-top:30px">
+        <button
+          id="master-data-product-cancelBtn"
+          type="button"
+          class="btn btn-danger"
+          style="width:9rem"
+          ng-click="dismiss()"
+        >
+          Cancel
+        </button>
+
+        <button
+          id="master-data-product-submitBtn"
+          type="button"
+          class="btn btn-success"
+          style="width:9rem"
+        >
+          Submit
+        </button>
+      </div>
+    </div>
+  </form>
+</div>
