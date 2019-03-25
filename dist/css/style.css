@@ -1,3 +1,6 @@
+*{
+    font-family: "Open Sans";
+}
 .btn-group-vertical .btn,
 .btn-group .btn {
     margin-bottom: 0;

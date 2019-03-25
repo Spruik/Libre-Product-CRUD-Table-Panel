@@ -2,6 +2,14 @@
   "name": "smart-factory-products-crud-table-panel",
   "version": "1.0.0",
   "description": "A table for the admin to CRUD products database",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Spruik/smart-factory-products-crud-table-panel"
+  },
+  "author": "Spruik Technologies",
+  "bugs": {
+    "url": "https://github.com/Spruik/smart-factory-products-crud-table-panel/issues"
+  },
   "main": "src/module.js",
   "scripts": {
     "lint": "eslint --color .",
