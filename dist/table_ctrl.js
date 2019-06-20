@@ -1,9 +1,9 @@
 'use strict';
 
-System.register(['lodash', 'jquery', 'app/plugins/sdk', './transformers', './editor', './column_options', './renderer', './product_form', './action_options_ctrl', './utils', './css/style.css!', './css/instant-serach.css!'], function (_export, _context) {
+System.register(['lodash', 'jquery', 'app/plugins/sdk', './transformers', './editor', './column_options', './renderer', './utils', './add_options', './product_group_options', './product_options', './css/style.css!', './css/instant-serach.css!'], function (_export, _context) {
   "use strict";
 
-  var _, $, MetricsPanelCtrl, transformDataToTable, tablePanelEditor, columnOptionsTab, TableRenderer, showProductForm, showActions, utils, _createClass, _get, panelDefaults, g_data, TableCtrl;
+  var _, $, MetricsPanelCtrl, transformDataToTable, tablePanelEditor, columnOptionsTab, TableRenderer, utils, add, productGroup, product, _createClass, _get, panelDefaults, TableCtrl;
 
   function _classCallCheck(instance, Constructor) {
     if (!(instance instanceof Constructor)) {
@@ -50,12 +50,14 @@ System.register(['lodash', 'jquery', 'app/plugins/sdk', './transformers', './edi
       columnOptionsTab = _column_options.columnOptionsTab;
     }, function (_renderer) {
       TableRenderer = _renderer.TableRenderer;
-    }, function (_product_form) {
-      showProductForm = _product_form.showProductForm;
-    }, function (_action_options_ctrl) {
-      showActions = _action_options_ctrl.showActions;
     }, function (_utils) {
       utils = _utils;
+    }, function (_add_options) {
+      add = _add_options;
+    }, function (_product_group_options) {
+      productGroup = _product_group_options;
+    }, function (_product_options) {
+      product = _product_options;
     }, function (_cssStyleCss) {}, function (_cssInstantSerachCss) {}],
     execute: function () {
       _createClass = function () {
@@ -128,7 +130,6 @@ System.register(['lodash', 'jquery', 'app/plugins/sdk', './transformers', './edi
         fontSize: '100%',
         sort: { col: 0, desc: true }
       };
-      g_data = [];
 
       _export('TableCtrl', TableCtrl = function (_MetricsPanelCtrl) {
         _inherits(TableCtrl, _MetricsPanelCtrl);
@@ -156,10 +157,9 @@ System.register(['lodash', 'jquery', 'app/plugins/sdk', './transformers', './edi
           _this.events.on('init-edit-mode', _this.onInitEditMode.bind(_this));
           _this.events.on('init-panel-actions', _this.onInitPanelActions.bind(_this));
 
-          //Remove listener before add it
+          _this.currentFilterGroup = 'All';
+
           $(document).off('click', 'tr.tr-affect#master-data-product-tr');
-          $(document).off('click', 'i.add-product-btn');
-          //Show form if a row is clicked
           $(document).on('click', 'tr.tr-affect#master-data-product-tr', function (e) {
             var rowData = $('td', this).map(function (index, td) {
               if (td.childNodes.length === 2) {
@@ -170,12 +170,8 @@ System.register(['lodash', 'jquery', 'app/plugins/sdk', './transformers', './edi
                 return '';
               }
             });
-            showActions(rowData, g_data, ctrl);
-          });
-
-          //Show form with no data when the add btn is clicked
-          $(document).on('click', 'i.add-product-btn', function () {
-            showProductForm(ctrl, g_data, null);
+            $scope.ctrl.currentProduct = utils.findProductById($scope.ctrl.products, rowData[$scope.ctrl.productDimension.indexOf('product_id')])[0];
+            product.showProductOptionsModal($scope.ctrl);
           });
           return _this;
         }
@@ -220,7 +216,6 @@ System.register(['lodash', 'jquery', 'app/plugins/sdk', './transformers', './edi
           value: function onDataReceived(dataList) {
 
             if (dataList.length === 0 || dataList === null || dataList === undefined) {
-              console.log('No data reveived');
               return;
             }
 
@@ -229,9 +224,26 @@ System.register(['lodash', 'jquery', 'app/plugins/sdk', './transformers', './edi
               return;
             }
 
-            g_data = this.getRestructuredData(dataList[0].columns, dataList[0].rows);
+            this.productGroups = [];
+            this.productGroupsFilter = [];
+
+            if (dataList[1]) {
+              if (dataList[1].type !== 'table') {
+                utils.alert('error', 'Error', 'To show the product list, please format data as a TABLE in the Metrics Setting');
+                return;
+              }
+
+              this.productGroups = dataList[1].rows.flat().sort();
+              this.productGroupsFilter = dataList[1].rows.flat().sort();
+            }
+
+            this.productGroupsFilter.splice(0, 0, 'All');
+
+            this.products = utils.getRestructuredProduct(dataList[0].columns, dataList[0].rows);
+            this.productDimension = utils.getDimension(dataList[0].columns);
 
             this.dataRaw = dataList;
+            this.dataRawUnChange = utils.copy(dataList);
             this.pageIndex = 0;
             // automatically correct transform mode based on data
             if (this.dataRaw && this.dataRaw.length) {
@@ -247,30 +259,34 @@ System.register(['lodash', 'jquery', 'app/plugins/sdk', './transformers', './edi
                 }
               }
             }
-
             this.render();
           }
         }, {
-          key: 'getRestructuredData',
-          value: function getRestructuredData(rawCols, rows) {
+          key: 'onAddButtonClick',
+          value: function onAddButtonClick() {
+            add.showAddOptionsModal(this);
+          }
+        }, {
+          key: 'onProductGroupButtonClick',
+          value: function onProductGroupButtonClick() {
+            productGroup.showProductGroupOptionsModal(this);
+          }
+        }, {
+          key: 'onGroupFilterChange',
+          value: function onGroupFilterChange() {
+            var _this2 = this;
 
-            var data = [];
-            var cols = rawCols.reduce(function (arr, c) {
-              var col = c.text.toLowerCase();
-              arr.push(col);
-              return arr;
-            }, []);
-            for (var i = 0; i < rows.length; i++) {
-              var row = rows[i];
-              var serise = {};
-              for (var k = 0; k < cols.length; k++) {
-                var col = cols[k];
-                serise[col] = row[k];
-              }
-              data.push(serise);
+            this.dataRaw[0].rows = this.dataRawUnChange[0].rows;
+
+            if (this.currentFilterGroup !== 'All') {
+              this.dataRaw[0].rows = this.dataRaw[0].rows.filter(function (row) {
+                return row[_this2.productDimension.indexOf('product_group')] === _this2.currentFilterGroup;
+              });
+            } else {
+              this.refresh();
             }
 
-            return data;
+            this.render();
           }
         }, {
           key: 'render',

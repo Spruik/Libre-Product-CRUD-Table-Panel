@@ -1,0 +1,68 @@
+<div class="modal-body">
+  <div class="modal-header">
+    <h2 class="modal-header-title">
+      <i class="fa fa-info-circle"></i>
+      <span class="p-l-1">Product</span>
+    </h2>
+
+    <a class="modal-header-close" id="" ng-click="dismiss();">
+      <i class="fa fa-remove"></i>
+    </a>
+  </div>
+
+    <div
+      class="modal-content"
+      id="modal-modal-content"
+      style="max-height:600px; overflow-y:scroll"
+    >
+      <div class="text-center">
+        <div class="radio-tile-group">
+          <!-- Update -->
+          <div class="input-container" ng-click="model.productOptionsModal.onViewClick()">
+            <input
+              id="view"
+              class="radio-button"
+              type="button"
+              name="master-data-product-group-actions-radio"
+            />
+            <div class="radio-tile">
+              <div class="icon edit-icon">
+                <i class="fa fa-eye fa-2x"></i>
+              </div>
+              <label for="edit" class="radio-tile-label">View</label>
+            </div>
+          </div>
+          <!-- Update -->
+          <div class="input-container" ng-click="model.productOptionsModal.onUpdateClick()">
+            <input
+              id="update"
+              class="radio-button"
+              type="button"
+              name="master-data-product-group-actions-radio"
+            />
+            <div class="radio-tile">
+              <div class="icon edit-icon">
+                <i class="fa fa-edit fa-2x"></i>
+              </div>
+              <label for="edit" class="radio-tile-label">Update</label>
+            </div>
+          </div>
+          <!-- Delete -->
+          <div class="input-container" ng-click="model.productOptionsModal.onRemoveClick()">
+            <input
+              id="remove"
+              class="radio-button"
+              type="button"
+              name="master-data-product-group-actions-radio"
+            />
+            <div class="radio-tile">
+              <div class="icon split-icon">
+                <i class="fa fa-remove fa-2x"></i>
+              </div>
+              <label for="split" class="radio-tile-label">Remove</label>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+</div>

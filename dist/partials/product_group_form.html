@@ -1,0 +1,81 @@
+<div class="modal-body">
+  <div class="modal-header">
+    <h2 class="modal-header-title">
+      <i class="fa fa-info-circle"></i>
+      <span class="p-l-1">Product Group</span>
+    </h2>
+
+    <a class="modal-header-close" id="pct-product-group-form-cancelBtn" ng-click="dismiss();">
+      <i class="fa fa-remove"></i>
+    </a>
+  </div>
+
+  <form class="form" name="form">
+    <div class="modal-content" id="modal-modal-content">
+      <div class="text-left">
+        <div>
+          <!-- Update -->
+          <div ng-if="model.productGroupFormModal.action === 'update'">
+            <p style="margin-bottom: 0px">Product Group To Be Updated:</p>
+            <select name="group" style="width: 100%" ng-model="model.productGroupFormModal.toBeUpdated">
+              <option ng-repeat="group in model.productGroups" value="{{group}}">{{group}}</option>
+            </select> 
+
+            <div style="margin-top: 20px">
+              <p style="margin-bottom: 0px">New Product Group Name:</p>
+              <input class="md-products-datalist-input" ng-model="model.productGroupFormModal.groupName" maxlength="50" type="text" required>
+            </div>            
+          </div>
+
+          <!-- Add -->
+          <div ng-if="model.productGroupFormModal.action === 'add'">
+            <input class="md-products-datalist-input" ng-model="model.productGroupFormModal.groupName" maxlength="50" type="text" required placeholder="Product Group Name">
+          </div>
+
+          <!-- Remove -->
+          <div ng-if="model.productGroupFormModal.action === 'remove'">
+            <select name="group" style="width: 100%" ng-model="model.productGroupFormModal.toBeRemoved">
+              <option ng-repeat="group in model.productGroups" value="{{group}}">{{group}}</option>
+            </select>        
+          </div>
+        </div>
+      </div>
+
+      <div class="custom-separator" style="margin-top:30px"></div>
+
+      <div class="button-wrapper" style="text-align:center; margin-top:30px">
+        <button
+          ng-if="model.productGroupFormModal.action === 'add'"
+          type="button"
+          class="btn btn-success"
+          style="width:9rem"
+          ng-disabled="form.$invalid"
+          ng-click="model.productGroupFormModal.onSubmit()"
+        >
+          Add
+        </button>
+
+        <button
+          ng-if="model.productGroupFormModal.action === 'update'"
+          type="button"
+          class="btn btn-success"
+          style="width:9rem"
+          ng-disabled="form.$invalid"
+          ng-click="model.productGroupFormModal.onUpdate()"
+        >
+          Update
+        </button>
+
+        <button
+          ng-if="model.productGroupFormModal.action === 'remove'"
+          type="button"
+          class="btn btn-success"
+          style="width:9rem"
+          ng-click="model.productGroupFormModal.onRemove()"
+        >
+          Remove
+        </button>
+      </div>
+    </div>
+  </form>
+</div>

@@ -5,9 +5,10 @@ import {transformDataToTable} from './transformers';
 import {tablePanelEditor} from './editor';
 import {columnOptionsTab} from './column_options';
 import {TableRenderer} from './renderer';
-import {showProductForm} from './product_form'
-import {showActions} from './action_options_ctrl'
 import * as utils from './utils'
+import * as add from './add_options'
+import * as productGroup from './product_group_options'
+import * as product from './product_options'
 
 import './css/style.css!';
 import './css/instant-serach.css!';
@@ -43,8 +44,6 @@ const panelDefaults = {
   sort: { col: 0, desc: true },
 };
 
-let g_data = []
-
 export class TableCtrl extends MetricsPanelCtrl {
 
   constructor($scope, $injector, templateSrv, annotationsSrv, $sanitize, variableSrv) {
@@ -68,10 +67,9 @@ export class TableCtrl extends MetricsPanelCtrl {
     this.events.on('init-edit-mode', this.onInitEditMode.bind(this));
     this.events.on('init-panel-actions', this.onInitPanelActions.bind(this));
 
-    //Remove listener before add it
+    this.currentFilterGroup = 'All'
+
     $(document).off('click', 'tr.tr-affect#master-data-product-tr')
-    $(document).off('click', 'i.add-product-btn')
-    //Show form if a row is clicked
     $(document).on('click', 'tr.tr-affect#master-data-product-tr', function (e) {
       const rowData = $('td', this).map((index, td)=>{
         if (td.childNodes.length === 2) {
@@ -82,12 +80,8 @@ export class TableCtrl extends MetricsPanelCtrl {
           return ''
         }
       })
-      showActions(rowData, g_data, ctrl)
-    })
-
-    //Show form with no data when the add btn is clicked
-    $(document).on('click', 'i.add-product-btn', function () {
-        showProductForm(ctrl, g_data, null)
+      $scope.ctrl.currentProduct = utils.findProductById($scope.ctrl.products, rowData[$scope.ctrl.productDimension.indexOf('product_id')])[0]
+      product.showProductOptionsModal($scope.ctrl)
     })
   }
 
@@ -127,7 +121,6 @@ export class TableCtrl extends MetricsPanelCtrl {
   onDataReceived(dataList) {
 
     if (dataList.length === 0 || dataList === null || dataList === undefined) {
-      console.log('No data reveived')
       return
     }
 
@@ -136,9 +129,26 @@ export class TableCtrl extends MetricsPanelCtrl {
       return
     }
 
-    g_data = this.getRestructuredData(dataList[0].columns, dataList[0].rows)
+    this.productGroups = []
+    this.productGroupsFilter = []
 
+    if (dataList[1]) {
+      if (dataList[1].type !== 'table') {
+        utils.alert('error', 'Error', 'To show the product list, please format data as a TABLE in the Metrics Setting')
+        return
+      }
+
+      this.productGroups = dataList[1].rows.flat().sort()
+      this.productGroupsFilter = dataList[1].rows.flat().sort()
+    }
+
+    this.productGroupsFilter.splice(0, 0, 'All')
+
+    this.products = utils.getRestructuredProduct(dataList[0].columns, dataList[0].rows)
+    this.productDimension = utils.getDimension(dataList[0].columns)
+    
     this.dataRaw = dataList;
+    this.dataRawUnChange = utils.copy(dataList)
     this.pageIndex = 0;
     // automatically correct transform mode based on data
     if (this.dataRaw && this.dataRaw.length) {
@@ -154,29 +164,28 @@ export class TableCtrl extends MetricsPanelCtrl {
         }
       }
     }
-
     this.render();
   }
 
-  getRestructuredData(rawCols, rows){
+  onAddButtonClick() {
+    add.showAddOptionsModal(this)
+  }
 
-    let data = []
-    let cols = rawCols.reduce((arr, c) => {
-        const col = c.text.toLowerCase()
-        arr.push(col)
-        return arr
-    }, [])
-    for (let i = 0; i < rows.length; i++) {
-        const row = rows[i];
-        let serise = {}
-        for (let k = 0; k < cols.length; k++) {
-            const col = cols[k];
-            serise[col] = row[k]
-        }
-        data.push(serise)
+  onProductGroupButtonClick() {
+    productGroup.showProductGroupOptionsModal(this)
+  }
+
+  onGroupFilterChange() {
+
+    this.dataRaw[0].rows = this.dataRawUnChange[0].rows
+
+    if(this.currentFilterGroup !== 'All') {
+      this.dataRaw[0].rows = this.dataRaw[0].rows.filter(row => row[this.productDimension.indexOf('product_group')] === this.currentFilterGroup)
+    }else {
+      this.refresh()
     }
 
-    return data
+    this.render()
   }
 
   render() {

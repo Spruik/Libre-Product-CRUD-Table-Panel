@@ -1,0 +1,96 @@
+<div class="modal-body">
+    <div class="modal-header">
+      <h2 class="modal-header-title">
+        <i class="fa fa-info-circle"></i>
+        <span class="p-l-1">Product</span>
+      </h2>
+  
+      <a class="modal-header-close" id="pct-product-form-cancelBtn" ng-click="dismiss();">
+        <i class="fa fa-remove"></i>
+      </a>
+    </div>
+  
+    <form class="form" id="master-data-product-form" name="form">
+      <div class="modal-content" id="modal-modal-content" style="max-height:600px; overflow-y:scroll">
+  
+        <div id="datalist-production-line" class="row form-group ptc-pf" style="margin-bottom: 10px">
+          <label class="col-lg-4 col-md-4 col-sm-4 col-xs-4" style="margin-top: 7px;">Product Group:</label>
+          <input class="md-products-datalist-input col-lg-7 col-md-7 col-sm-7 col-xs-7" type="text" ng-model="model.productFormViewModal.productGroup" readonly>
+        </div>
+  
+        <!-- -------- -->
+        <div class="custom-separator" style="margin-top:30px"></div>
+        <!-- -------- -->
+  
+        <!-- ID -->
+        <div id="datalist-production-line" class="row form-group ptc-pf" style="margin-bottom: 10px">
+          <label class="col-lg-4 col-md-4 col-sm-4 col-xs-4" style="margin-top: 7px;">Product ID:</label>
+          <input class="md-products-datalist-input col-lg-7 col-md-7 col-sm-7 col-xs-7" type="number" ng-model="model.productFormViewModal.productId" readonly>
+        </div>
+  
+        <!-- Product Desc -->
+        <div id="datalist-production-line" class="row form-group ptc-pf" style="margin-bottom: 10px">
+          <label for="productType" class="col-lg-4 col-md-4 col-sm-4 col-xs-4" style="margin-top: 7px;">Product Description/Name:</label>
+          <input class="md-products-datalist-input col-lg-7 col-md-7 col-sm-7 col-xs-7" ng-model="model.productFormViewModal.productDesc" readonly>
+        </div>
+  
+        <!-- -------- -->
+        <div class="custom-separator" style="margin-top:30px"></div>
+        <!-- -------- -->
+  
+        <div id="datalist-production-line" class="row form-group ptc-pf" style="margin-bottom: 8px">
+          <label class="col-lg-2 col-md-2 col-sm-2 col-xs-2" style="color: aquamarine; cursor: pointer;"></label>
+          <label class="col-lg-3 col-md-3 col-sm-3 col-xs-3">Ingredient</label>
+          <label class="col-lg-1 col-md-1 col-sm-1 col-xs-1">Oz</label>
+          <label class="col-lg-3 col-md-3 col-sm-3 col-xs-3">Grams On Scale</label>            
+          <label class="col-lg-3 col-md-3 col-sm-3 col-xs-3">Grams Total</label>        
+        </div>
+  
+        <!-- Crust -->
+        <div id="datalist-production-line" class="row form-group ptc-pf" style="margin-bottom: 3px">
+          <label class="col-lg-2 col-md-2 col-sm-2 col-xs-2" style="margin-top: 7px;">Crust</label>
+          <input class="md-products-datalist-input col-lg-3 col-md-3 col-sm-3 col-xs-3" type="text" placeholder="Ingredient Name" ng-model="model.productFormViewModal.ingredient.crust.name" readonly>
+          <input class="md-products-datalist-input col-lg-1 col-md-1 col-sm-1 col-xs-1" type="number" ng-model="model.productFormViewModal.ingredient.crust.oz" readonly>
+          <input class="md-products-datalist-input col-lg-3 col-md-3 col-sm-3 col-xs-3" type="number" ng-model="model.productFormViewModal.ingredient.crust.gramsOnScale" readonly>
+          <input class="md-products-datalist-input col-lg-3 col-md-3 col-sm-3 col-xs-3" type="number" ng-model="model.productFormViewModal.ingredient.crust.gramsTotal" readonly>
+        </div>
+  
+        <!-- Sauce -->
+        <div id="datalist-production-line" class="row form-group ptc-pf" style="margin-bottom: 3px">
+          <label class="col-lg-2 col-md-2 col-sm-2 col-xs-2" style="margin-top: 7px;">Sauce</label>
+          <input class="md-products-datalist-input col-lg-3 col-md-3 col-sm-3 col-xs-3" type="text" placeholder="Ingredient Name" ng-model="model.productFormViewModal.ingredient.sauce.name" readonly>
+          <input class="md-products-datalist-input col-lg-1 col-md-1 col-sm-1 col-xs-1" type="number" ng-model="model.productFormViewModal.ingredient.sauce.oz" readonly>
+          <input class="md-products-datalist-input col-lg-3 col-md-3 col-sm-3 col-xs-3" type="number" ng-model="model.productFormViewModal.ingredient.sauce.gramsOnScale" readonly>
+          <input class="md-products-datalist-input col-lg-3 col-md-3 col-sm-3 col-xs-3" type="number" ng-model="model.productFormViewModal.ingredient.sauce.gramsTotal" readonly>
+        </div>
+  
+        <!-- Toppings ng-repeat-loop -->
+        <div id="datalist-production-line" ng-repeat="topping in model.productFormViewModal.ingredient.toppings" class="row form-group ptc-pf" style="margin-bottom: 3px">
+          <label class="col-lg-2 col-md-2 col-sm-2 col-xs-2" style="margin-top: 7px;">#{{$index + 1}}</label>
+          <input class="md-products-datalist-input col-lg-3 col-md-3 col-sm-3 col-xs-3" type="text" placeholder="Ingredient Name" ng-model="topping.name" readonly>
+          <input class="md-products-datalist-input col-lg-1 col-md-1 col-sm-1 col-xs-1" type="number" ng-model="topping.oz" readonly>
+          <input class="md-products-datalist-input col-lg-3 col-md-3 col-sm-3 col-xs-3" type="number" ng-model="topping.gramsOnScale" readonly>
+          <input class="md-products-datalist-input col-lg-3 col-md-3 col-sm-3 col-xs-3" type="number" ng-model="topping.gramsTotal" readonly>
+        </div>
+  
+        <!-- -------- -->
+        <div class="custom-separator" style="margin-top:30px"></div>
+        <!-- -------- -->
+  
+        <!-- Comment -->
+        <div id="datalist-production-line" class="row form-group ptc-pf">
+          <label for="productType" class="col-lg-4 col-md-4 col-sm-4 col-xs-4" style="margin-top: 7px; align-self: center">Comment:</label>
+          <textarea
+            type="textarea"
+            class="col-lg-7 col-md-7 col-sm-7 col-xs-7"
+            rows="3"
+            style="width: 100%; border: solid .1px lightgray; resize: none"
+            maxlength="250"
+            ng-model="model.productFormViewModal.comment"
+            readonly
+          ></textarea>      
+        </div>
+      </div>
+    </form>
+  </div>
+  

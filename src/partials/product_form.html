@@ -5,52 +5,110 @@
       <span class="p-l-1">Add Product</span>
     </h2>
 
-    <a class="modal-header-close" ng-click="dismiss();">
+    <a class="modal-header-close" id="pct-product-form-cancelBtn" ng-click="dismiss();">
       <i class="fa fa-remove"></i>
     </a>
   </div>
 
-  <form class="form" id="master-data-product-form">
-    <div class="modal-content" id="modal-modal-content">
-      <div class="text-left">
-        <div>
-          <div class="left-group" style="float:left">
-            <p style="margin: 20px 0px 0px 25px">Product ID:</p>
-            <div>
-                <input style=" width:130px; margin: 0px 0px 0px 23px" id="master-data-product-id-input" class="md-products-datalist-input" type="number" name="product-id" ng-value="{{model.id}}" placeholder="Please enter ID">
-            </div>
-          </div>
+  <form class="form" id="master-data-product-form" name="form">
+    <div class="modal-content" id="modal-modal-content" style="max-height:600px; overflow-y:scroll">
 
-          <div class="right-group" style="float:right">
-            <p style="margin: 20px 65px 0px 5px">Product Description:</p>
-            <div>
-                <input style=" width:260px; margin: 0px 23px 0px 0px" id="master-data-product-desc-input" class="md-products-datalist-input" maxlength="50" type="text" name="product-description" value="{{model.desc}}" placeholder="Please enter Product Desc">
-            </div>
-          </div>
-        </div>
-        <div class="clearfix"></div>
+      <div id="datalist-production-line" class="row form-group ptc-pf" style="margin-bottom: 10px">
+        <label class="col-lg-4 col-md-4 col-sm-4 col-xs-4" style="margin-top: 7px;">Product Group:</label>
+        <select class="md-products-datalist-input col-lg-7 col-md-7 col-sm-7 col-xs-7" required ng-if="model.productGroups.length !== 0" style="width: 100%" ng-model="model.productFormModal.productGroup">
+          <option ng-repeat="group in model.productGroups" value="{{group}}">{{group}}</option>
+        </select> 
+        <label class="col-lg-7 col-md-7 col-sm-7 col-xs-7" ng-if="model.productGroups.length === 0" style="margin-top: 7px; color: lightcoral;">Please create a product group before creating a product</label>
       </div>
 
+      <!-- -------- -->
       <div class="custom-separator" style="margin-top:30px"></div>
+      <!-- -------- -->
+
+      <!-- ID -->
+      <div id="datalist-production-line" class="row form-group ptc-pf" style="margin-bottom: 10px">
+        <label class="col-lg-4 col-md-4 col-sm-4 col-xs-4" style="margin-top: 7px;">Product ID:</label>
+        <input class="md-products-datalist-input col-lg-7 col-md-7 col-sm-7 col-xs-7" type="number" ng-model="model.productFormModal.productId" placeholder="Product ID" required>
+      </div>
+
+      <!-- Product Desc -->
+      <div id="datalist-production-line" class="row form-group ptc-pf" style="margin-bottom: 10px">
+        <label for="productType" class="col-lg-4 col-md-4 col-sm-4 col-xs-4" style="margin-top: 7px;">Product Description/Name:</label>
+        <input class="md-products-datalist-input col-lg-7 col-md-7 col-sm-7 col-xs-7" ng-model="model.productFormModal.productDesc" placeholder="Product Desc/Name" required>
+      </div>
+
+      <!-- -------- -->
+      <div class="custom-separator" style="margin-top:30px"></div>
+      <!-- -------- -->
+
+      <div id="datalist-production-line" class="row form-group ptc-pf" style="margin-bottom: 8px">
+        <label class="col-lg-2 col-md-2 col-sm-2 col-xs-2" ng-click="model.productFormModal.func.onAddTopping()" style="color: lightseagreen; cursor: pointer;">Add +</label>
+        <label class="col-lg-3 col-md-3 col-sm-3 col-xs-3">Ingredient</label>
+        <label class="col-lg-1 col-md-1 col-sm-1 col-xs-1">Oz</label>
+        <label class="col-lg-3 col-md-3 col-sm-3 col-xs-3">Grams On Scale</label>            
+        <label class="col-lg-3 col-md-3 col-sm-3 col-xs-3">Grams Total</label>        
+      </div>
+
+      <!-- Crust -->
+      <div id="datalist-production-line" class="row form-group ptc-pf" style="margin-bottom: 3px">
+        <label class="col-lg-2 col-md-2 col-sm-2 col-xs-2" style="margin-top: 7px;">Crust</label>
+        <input class="md-products-datalist-input col-lg-3 col-md-3 col-sm-3 col-xs-3" type="text" placeholder="Ingredient Name" ng-model="model.productFormModal.ingredient.crust.name" required>
+        <input class="md-products-datalist-input col-lg-1 col-md-1 col-sm-1 col-xs-1" type="number" ng-model="model.productFormModal.ingredient.crust.oz" required>
+        <input class="md-products-datalist-input col-lg-3 col-md-3 col-sm-3 col-xs-3" type="number" ng-model="model.productFormModal.ingredient.crust.gramsOnScale" required>
+        <input class="md-products-datalist-input col-lg-3 col-md-3 col-sm-3 col-xs-3" type="number" ng-model="model.productFormModal.ingredient.crust.gramsTotal" required>
+      </div>
+
+      <!-- Sauce -->
+      <div id="datalist-production-line" class="row form-group ptc-pf" style="margin-bottom: 3px">
+        <label class="col-lg-2 col-md-2 col-sm-2 col-xs-2" style="margin-top: 7px;">Sauce</label>
+        <input class="md-products-datalist-input col-lg-3 col-md-3 col-sm-3 col-xs-3" type="text" placeholder="Ingredient Name" ng-model="model.productFormModal.ingredient.sauce.name" required>
+        <input class="md-products-datalist-input col-lg-1 col-md-1 col-sm-1 col-xs-1" type="number" ng-model="model.productFormModal.ingredient.sauce.oz" required>
+        <input class="md-products-datalist-input col-lg-3 col-md-3 col-sm-3 col-xs-3" type="number" ng-model="model.productFormModal.ingredient.sauce.gramsOnScale" required>
+        <input class="md-products-datalist-input col-lg-3 col-md-3 col-sm-3 col-xs-3" type="number" ng-model="model.productFormModal.ingredient.sauce.gramsTotal" required>
+      </div>
+
+      <!-- Toppings ng-repeat-loop -->
+      <div id="datalist-production-line" ng-repeat="topping in model.productFormModal.ingredient.toppings" class="row form-group ptc-pf" style="margin-bottom: 3px">
+        <label class="col-lg-2 col-md-2 col-sm-2 col-xs-2" title="Click to remove the last topping" ng-if="$index === model.productFormModal.ingredient.toppings.length - 1" ng-click="model.productFormModal.func.onRemoveTopping()" style="margin-top: 7px; color: lightcoral; cursor: pointer;">#{{$index + 1}}</label>
+        <label class="col-lg-2 col-md-2 col-sm-2 col-xs-2" ng-if="$index !== model.productFormModal.ingredient.toppings.length - 1" style="margin-top: 7px;">#{{$index + 1}}</label>
+        <input class="md-products-datalist-input col-lg-3 col-md-3 col-sm-3 col-xs-3" type="text" placeholder="Ingredient Name" ng-model="topping.name" required>
+        <input class="md-products-datalist-input col-lg-1 col-md-1 col-sm-1 col-xs-1" type="number" ng-model="topping.oz" required>
+        <input class="md-products-datalist-input col-lg-3 col-md-3 col-sm-3 col-xs-3" type="number" ng-model="topping.gramsOnScale" required>
+        <input class="md-products-datalist-input col-lg-3 col-md-3 col-sm-3 col-xs-3" type="number" ng-model="topping.gramsTotal" required>
+      </div>
+
+      <!-- -------- -->
+      <div class="custom-separator" style="margin-top:30px"></div>
+      <!-- -------- -->
+
+      <!-- Comment -->
+      <div id="datalist-production-line" class="row form-group ptc-pf">
+        <label for="productType" class="col-lg-4 col-md-4 col-sm-4 col-xs-4" style="margin-top: 7px; align-self: center">Comment:</label>
+        <textarea
+          type="textarea"
+          class="col-lg-7 col-md-7 col-sm-7 col-xs-7"
+          rows="3"
+          style="width: 100%; border: solid .1px lightgray; resize: none"
+          placeholder="Any comments (e.g. Better run on line 1) - Maximun 250 Characters"
+          maxlength="250"
+          ng-model="model.productFormModal.comment"
+        ></textarea>      
+      </div>
+
+      <!-- -------- -->
+      <div class="custom-separator" style="margin-top:30px"></div>
+      <!-- -------- -->
 
       <div class="button-wrapper" style="text-align:center; margin-top:30px">
-        <button
-          id="master-data-product-cancelBtn"
-          type="button"
-          class="btn btn-danger"
-          style="width:9rem"
-          ng-click="dismiss()"
-        >
-          Cancel
-        </button>
-
         <button
           id="master-data-product-submitBtn"
           type="button"
           class="btn btn-success"
           style="width:9rem"
+          ng-disabled="form.$invalid || model.productGroups.length === 0"
+          ng-click="model.productFormModal.func.onSubmit()"
         >
-          Submit
+          {{model.productFormModal.submitBtnMsg}}
         </button>
       </div>
     </div>

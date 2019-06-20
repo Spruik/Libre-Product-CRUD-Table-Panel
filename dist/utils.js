@@ -3,7 +3,7 @@
 System.register(['app/core/core'], function (_export, _context) {
   "use strict";
 
-  var appEvents, hostname, postgRestHost, influxHost, post, remove, get, update, alert, showModal, spaceCheck;
+  var appEvents, hostname, postgRestHost, influxHost, post, remove, get, update, alert, showModal, showLargeModal, spaceCheck, successCallBack, failCallBack, getRestructuredProduct, findProductById, getDimension, copy, hasObjectChanged;
   return {
     setters: [function (_appCoreCore) {
       appEvents = _appCoreCore.appEvents;
@@ -13,14 +13,19 @@ System.register(['app/core/core'], function (_export, _context) {
 
       _export('postgRestHost', postgRestHost = 'http://' + hostname + ':5436/');
 
+      _export('postgRestHost', postgRestHost);
+
       _export('influxHost', influxHost = 'http://' + hostname + ':8086/');
+
+      _export('influxHost', influxHost);
 
       _export('post', post = function post(url, line) {
         return new Promise(function (resolve, reject) {
           var xhr = new XMLHttpRequest();
           xhr.open('POST', url);
           xhr.onreadystatechange = handleResponse;
-          xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+          xhr.setRequestHeader("Accept", "application/json");
+          xhr.setRequestHeader("Content-Type", "application/json");
           xhr.onerror = function (e) {
             return reject(e);
           };
@@ -43,6 +48,8 @@ System.register(['app/core/core'], function (_export, _context) {
           }
         });
       });
+
+      _export('post', post);
 
       _export('remove', remove = function remove(url) {
         return new Promise(function (resolve, reject) {
@@ -70,6 +77,8 @@ System.register(['app/core/core'], function (_export, _context) {
         });
       });
 
+      _export('remove', remove);
+
       _export('get', get = function get(url) {
         return new Promise(function (resolve, reject) {
           var xhr = new XMLHttpRequest();
@@ -93,12 +102,15 @@ System.register(['app/core/core'], function (_export, _context) {
         });
       });
 
+      _export('get', get);
+
       _export('update', update = function update(url, line) {
         return new Promise(function (resolve, reject) {
           var xhr = new XMLHttpRequest();
           xhr.open('PATCH', url);
           xhr.onreadystatechange = handleResponse;
-          xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+          xhr.setRequestHeader("Accept", "application/json");
+          xhr.setRequestHeader("Content-Type", "application/json");
           xhr.onerror = function (e) {
             return reject(e);
           };
@@ -122,9 +134,13 @@ System.register(['app/core/core'], function (_export, _context) {
         });
       });
 
+      _export('update', update);
+
       _export('alert', alert = function alert(type, title, msg) {
         appEvents.emit('alert-' + type, [title, msg]);
       });
+
+      _export('alert', alert);
 
       _export('showModal', showModal = function showModal(html, data) {
         appEvents.emit('show-modal', {
@@ -133,6 +149,18 @@ System.register(['app/core/core'], function (_export, _context) {
           model: data
         });
       });
+
+      _export('showModal', showModal);
+
+      _export('showLargeModal', showLargeModal = function showLargeModal(html, data) {
+        appEvents.emit('show-modal', {
+          src: 'public/plugins/smart-factory-products-crud-table-panel/partials/' + html,
+          modalClass: '',
+          model: data
+        });
+      });
+
+      _export('showLargeModal', showLargeModal);
 
       _export('spaceCheck', spaceCheck = function spaceCheck(str) {
         if (str[str.length - 1] === ' ') {
@@ -144,21 +172,77 @@ System.register(['app/core/core'], function (_export, _context) {
 
       _export('spaceCheck', spaceCheck);
 
-      _export('post', post);
+      _export('successCallBack', successCallBack = function successCallBack(modalId, successMsg, ctrl) {
+        return function () {
+          $('#' + modalId).trigger('click');
+          alert('success', 'Success', successMsg);
+          ctrl.refresh();
+        };
+      });
 
-      _export('get', get);
+      _export('successCallBack', successCallBack);
 
-      _export('postgRestHost', postgRestHost);
+      _export('failCallBack', failCallBack = function failCallBack(modalId, failMsg) {
+        return function () {
+          $('#' + modalId).trigger('click');
+          alert('error', 'Error', failMsg);
+        };
+      });
 
-      _export('influxHost', influxHost);
+      _export('failCallBack', failCallBack);
 
-      _export('alert', alert);
+      _export('getRestructuredProduct', getRestructuredProduct = function getRestructuredProduct(rawCols, rows) {
+        var data = [];
+        var cols = rawCols.reduce(function (arr, c) {
+          var col = c.text.toLowerCase();
+          arr.push(col);
+          return arr;
+        }, []);
+        for (var i = 0; i < rows.length; i++) {
+          var row = rows[i];
+          var serise = {};
+          for (var k = 0; k < cols.length; k++) {
+            var col = cols[k];
+            serise[col] = row[k];
+          }
+          serise.ingredient = JSON.parse(serise.ingredient);
+          data.push(serise);
+        }
+        return data;
+      });
 
-      _export('showModal', showModal);
+      _export('getRestructuredProduct', getRestructuredProduct);
 
-      _export('remove', remove);
+      _export('findProductById', findProductById = function findProductById(products, key) {
+        if (typeof key === 'string') {
+          key = parseInt(key);
+        }
+        return products.filter(function (product) {
+          return product.product_id === key;
+        });
+      });
 
-      _export('update', update);
+      _export('findProductById', findProductById);
+
+      _export('getDimension', getDimension = function getDimension(cols) {
+        return cols.map(function (col) {
+          return col.text;
+        });
+      });
+
+      _export('getDimension', getDimension);
+
+      _export('copy', copy = function copy(obj) {
+        return JSON.parse(JSON.stringify(obj));
+      });
+
+      _export('copy', copy);
+
+      _export('hasObjectChanged', hasObjectChanged = function hasObjectChanged(oldObj, newObj) {
+        return JSON.stringify(oldObj) !== JSON.stringify(newObj);
+      });
+
+      _export('hasObjectChanged', hasObjectChanged);
     }
   };
 });

@@ -1,99 +1,180 @@
 import * as utils from './utils'
+import * as apis from './apis'
 
-let isUpdating
+const _onAddTopping = scope => {
+  const length = scope.productFormModal.ingredient.toppings.length
+  if (length >= 6) { return }
+  const topping = {
+    id: length + 1,
+    name: "",
+    oz: null,
+    gramsOnScale: null,
+    gramsTotal: null
+  }
+  scope.productFormModal.ingredient.toppings.push(topping)
+}
 
-export function showProductForm(tableCtrl, allData, rowData) {
-  
-  isUpdating = false
-  let id
-  let desc = ''
-  
-  if (rowData) {
-    id = rowData[0]
-    desc = rowData[1]
-    isUpdating = true
+const addPreprocess = scope => {
+  //init data
+  scope.productFormModal = {
+    productGroup: scope.productGroups[0] || "",
+    productId: null,
+    productDesc: "",
+    comment: "",
+    ingredient: {
+      crust: {
+        name: "",
+        oz: null,
+        gramsOnScale: null,
+        gramsTotal: null
+      },
+      sauce: {
+        name: "",
+        oz: null,
+        gramsOnScale: null,
+        gramsTotal: null
+      },
+      toppings: [
+        {
+          id: 1,
+          name: "",
+          oz: null,
+          gramsOnScale: null,
+          gramsTotal: null
+        }
+      ]
+    },
+    func: {
+      onAddTopping: () => {
+        _onAddTopping(scope)
+      },
+      onRemoveTopping: () => { 
+        scope.productFormModal.ingredient.toppings.pop() 
+      }
+    },
+    submitBtnMsg: 'Submit'
   }
 
-  utils.showModal('product_form.html', {id: id, desc:desc})
-  removeListeners()
-  addListeners(tableCtrl, allData, rowData)
+  scope.productFormModal.func.onSubmit = () => {
+    const product = scope.productFormModal
+    
+    if (utils.findProductById(scope.products, product.productId).length !== 0) {
+      utils.alert('warning', 'Warning', `Product With Product ID "${product.productId}" Already Exists`)
+      return
+    }
+
+    apis.addProduct(
+      product.productGroup, 
+      product.productDesc, 
+      product.productId, 
+      product.comment,
+      product.ingredient,
+      utils.successCallBack('pct-product-form-cancelBtn', 'Product Has Been Added Successfully', scope),
+      e => utils.failCallBack('pct-product-form-cancelBtn', `An Error Occurr While Adding The Product Due To ${e}`)
+    )
+  }
 }
 
-function removeListeners(){
-  $(document).off('click', '#master-data-product-submitBtn')
+/**
+ * Data init for viewing product
+ * @param {*} scope 
+ */
+const viewPreprocess = scope => {
+  const cur = scope.currentProduct
+  scope.productFormViewModal = {
+    productGroup: cur.product_group,
+    productId: cur.product_id,
+    productDesc: cur.product_desc,
+    comment: cur.comment || "",
+    ingredient: cur.ingredient,
+  }
 }
 
-function addListeners(tableCtrl, allData, rowData){
-  $(document).on('click', '#master-data-product-submitBtn', e => {
-    const inputs = $('#master-data-product-form').serializeArray()
-    //remove spaces in the back of the product description if there is
-    inputs[1].value = utils.spaceCheck(inputs[1].value)
-    if (isInputsValid(inputs, allData, rowData)) {
-      if (isUpdating) {
-        updateProduct(inputs, rowData, tableCtrl)
-      }else {
-        addProduct(inputs, tableCtrl)
+/**
+ * Data init for updating product
+ * @param {*} scope 
+ */
+const updatePreprocess = scope => {
+
+  const cur = scope.currentProduct
+
+  scope.productFormModal = {
+    productGroup: cur.product_group,
+    productId: cur.product_id,
+    productDesc: cur.product_desc,
+    comment: cur.comment || "",
+    ingredient: cur.ingredient,
+    func: {
+      onAddTopping: () => {
+        _onAddTopping(scope)
+      },
+      onRemoveTopping: () => { 
+        scope.productFormModal.ingredient.toppings.pop() 
+      }
+    },
+    submitBtnMsg: 'Update'
+  }
+
+  scope.tempProductForm = utils.copy(scope.productFormModal)
+
+  scope.productFormModal.func.onSubmit = () => {
+
+    const product = scope.productFormModal
+    const match = utils.findProductById(scope.products, product.productId)
+
+    //Check if make any changes
+    if (!utils.hasObjectChanged(scope.tempProductForm, product)) {
+      utils.alert('warning', 'Warning', `You Did Not Make Any Changes On It`)
+      return
+    }
+
+    //Check if id is invalid
+    if (match.length !== 0) {
+      if (match[0].product_id !== cur.product_id) {
+        utils.alert('warning', 'Warning', `Product With Product ID "${product.productId}" Already Exists`)
+        return
       }
     }
-  })
+
+    apis.updateProduct(
+      cur.product_id,
+      product.productGroup,
+      product.productDesc,
+      product.productId,
+      product.comment,
+      product.ingredient,
+      utils.successCallBack('pct-product-form-cancelBtn', 'Product Has Been Updated Successfully', scope),
+      e => utils.failCallBack('pct-product-form-cancelBtn', `An Error Occurr While Updating The Product Due To ${e}`)
+    )
+  }
 }
 
-function isInputsValid(inputs, allData, rowData){
-  if (inputs[0].value === '' || inputs[1].value === '') {
-    utils.alert('warning', 'Warning', 'All fields are required')
-    return false
-  }
-
-  let ids
-
-  if (isUpdating) {
-    ids = allData.reduce((arr, d) => {
-      if (d.product_id !== parseInt(rowData[0])) {
-        arr.push(d.product_id)
-      }
-      return arr
-    }, [])
-  }else {
-    ids = allData.reduce((arr, d) => {
-      arr.push(d.product_id)
-      return arr
-    }, [])
-  }
-
-  if (ids.indexOf(parseInt(inputs[0].value)) !== -1) {
-    utils.alert('warning', 'Warning', 'Product exists')
-    return false
-  }
-
-  return true
+export const showAddProductFormModal = scope => {
+  addPreprocess(scope)
+  utils.showLargeModal('product_form.html', scope)
 }
 
-function addProduct(inputs, ctrl){
-  const line = 'product_id=' + inputs[0].value + '&product_desc=' + inputs[1].value
-  const url = utils.postgRestHost + 'products'
-  utils.post(url, line).then(res => {
-    // console.log(res)
-    $('#master-data-product-cancelBtn').trigger('click')
-    utils.alert('success', 'Success', 'Product has been added')
-    ctrl.refresh()
-  }).catch(e => {
-    // console.log(e)
-    $('#master-data-product-cancelBtn').trigger('click')
-    utils.alert('error', 'Error', 'Error occurred while adding the product to the database, please try again')
-  })
+export const showViewProductFormModal = scope => {
+  viewPreprocess(scope)
+  utils.showLargeModal('product_form_view.html', scope)
 }
 
-function updateProduct(inputs, data, ctrl) {
-  const url = utils.postgRestHost + 'products?product_id=eq.' + data[0] + '&product_desc=eq.' + data[1]
-  const line = 'product_id=' + inputs[0].value + '&product_desc=' + inputs[1].value
-  utils.update(url, line).then(res => {
-    // console.log(res)
-    $('#master-data-product-cancelBtn').trigger('click')
-    utils.alert('success', 'Success', 'Product has been updated')
-    ctrl.refresh()
-  }).catch(e => {
-    // console.log(e)
-    $('#master-data-product-cancelBtn').trigger('click')
-    utils.alert('error', 'Error', 'Error occurred while updating the product to the database, please try again')
-  })
+export const showUpdateProductFormModal = scope => {
+  updatePreprocess(scope)
+  utils.showLargeModal('product_form.html', scope)
+}
+
+export const removeProduct = scope => {
+  const id = scope.currentProduct.product_id
+  scope.confirmModal = {
+    confirmMsg: `Please confirm that you want to remove product ${id}`,
+    onConfirm: () => {
+      apis.removeProduct(
+        id, 
+        utils.successCallBack('pct-confirm-modal-cancelBtn', `Product ${id} Has Been Removed Successfully`, scope),
+        e => utils.failCallBack('pct-confirm-modal-cancelBtn', `An Error Occurr While Removing The Product Due To ${e}`)
+      )
+    }
+  }
+  utils.showModal('confirm_modal.html', scope)
 }

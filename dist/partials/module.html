@@ -1,6 +1,18 @@
 
-<div class="text-right" ng-show="ctrl.table.rows.length">
-    <span id="" style="font-size: 18px; margin-right: 10px"><i class="fa fa-plus-circle fa-effect add-product-btn"></i></span>
+<div>
+  <span>
+    <span id="" style="font-size: 12px; margin-right: 10px">Group Filter:     
+      <select name="group" style="width: 45%" ng-change="ctrl.onGroupFilterChange()" ng-model="ctrl.currentFilterGroup">
+        <option ng-repeat="group in ctrl.productGroupsFilter" value="{{group}}">{{group}}</option>
+      </select> 
+    </span>
+  </span>
+  <span class="text-right" style="float: right">
+    <span style="font-size: 18px; margin-right: 10px;">
+      <i style="margin-top: 8px;" ng-click="ctrl.onProductGroupButtonClick()" class="fa fa-cubes fa-effect add-product-btn"></i>
+      <i style="margin-top: 8px;" ng-click="ctrl.onAddButtonClick()" class="fa fa-plus-circle fa-effect add-product-btn"></i>
+    </span>
+  </span>
 </div>
 
 <div class="table-panel-container" style="margin-top:5px">
@@ -27,12 +39,12 @@
 </div>
 <div class="datapoints-warning" ng-show="ctrl.table.rows.length===0">
 	<span class="small" >
-		No data to show <tip>Nothing returned by data query</tip>
+		No product to show <tip>Nothing returned by data query OR No product to show</tip>
     </span> 
     <br>
     <br>
     <span class="small" >
-        Add a new product &nbsp;&nbsp;<i class="fa fa-plus-circle fa-effect add-product-btn"></i>
+        Add a new product &nbsp;&nbsp;<i class="fa fa-plus-circle fa-effect" ng-click="ctrl.onAddButtonClick()"></i>
     </span>
 </div>
 <div class="table-panel-footer">
