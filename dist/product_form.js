@@ -14,7 +14,8 @@ System.register(['./utils', './apis'], function (_export, _context) {
     execute: function () {
       _onAddTopping = function _onAddTopping(scope) {
         var length = scope.productFormModal.ingredient.toppings.length;
-        if (length >= 6) {
+        var maxToppingNum = 10;
+        if (length >= maxToppingNum) {
           return;
         }
         var topping = {

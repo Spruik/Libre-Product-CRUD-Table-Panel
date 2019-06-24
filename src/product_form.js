@@ -3,7 +3,8 @@ import * as apis from './apis'
 
 const _onAddTopping = scope => {
   const length = scope.productFormModal.ingredient.toppings.length
-  if (length >= 6) { return }
+  const maxToppingNum = 10
+  if (length >= maxToppingNum) { return }
   const topping = {
     id: length + 1,
     name: "",

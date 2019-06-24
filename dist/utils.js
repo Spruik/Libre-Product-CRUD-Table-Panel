@@ -214,9 +214,6 @@ System.register(['app/core/core'], function (_export, _context) {
       _export('getRestructuredProduct', getRestructuredProduct);
 
       _export('findProductById', findProductById = function findProductById(products, key) {
-        if (typeof key === 'string') {
-          key = parseInt(key);
-        }
         return products.filter(function (product) {
           return product.product_id === key;
         });

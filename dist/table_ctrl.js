@@ -170,7 +170,7 @@ System.register(['lodash', 'jquery', 'app/plugins/sdk', './transformers', './edi
                 return '';
               }
             });
-            $scope.ctrl.currentProduct = utils.findProductById($scope.ctrl.products, rowData[$scope.ctrl.productDimension.indexOf('product_id')])[0];
+            $scope.ctrl.currentProduct = utils.findProductById($scope.ctrl.products, rowData[1])[0];
             product.showProductOptionsModal($scope.ctrl);
           });
           return _this;

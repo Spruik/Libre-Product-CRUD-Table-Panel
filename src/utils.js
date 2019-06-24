@@ -170,9 +170,6 @@ export const getRestructuredProduct = (rawCols, rows) => {
 }
 
 export const findProductById = (products, key) => {
-  if (typeof key === 'string') {
-    key = parseInt(key)
-  }
   return products.filter(product => product.product_id === key)
 }
 

@@ -28,7 +28,7 @@
       <!-- ID -->
       <div id="datalist-production-line" class="row form-group ptc-pf" style="margin-bottom: 10px">
         <label class="col-lg-4 col-md-4 col-sm-4 col-xs-4" style="margin-top: 7px;">Product ID:</label>
-        <input class="md-products-datalist-input col-lg-7 col-md-7 col-sm-7 col-xs-7" type="number" ng-model="model.productFormModal.productId" placeholder="Product ID" required>
+        <input class="md-products-datalist-input col-lg-7 col-md-7 col-sm-7 col-xs-7" type="tel" pattern="[0-9]*" maxlength="20" ng-model="model.productFormModal.productId" placeholder="Product ID" required>
       </div>
 
       <!-- Product Desc -->
