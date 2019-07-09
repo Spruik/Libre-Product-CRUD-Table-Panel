@@ -1,37 +1,81 @@
 'use strict';
 
-System.register(['./utils', './apis'], function (_export, _context) {
+System.register(['lodash', './utils', './apis'], function (_export, _context) {
   "use strict";
 
-  var utils, apis, _onAddTopping, addPreprocess, viewPreprocess, updatePreprocess, showAddProductFormModal, showViewProductFormModal, showUpdateProductFormModal, removeProduct;
+  var _, utils, apis, _onAddApplicator, _onAddSubMaterial, isMaterialValid, addPreprocess, viewPreprocess, updatePreprocess, showAddProductFormModal, showViewProductFormModal, showUpdateProductFormModal, removeProduct;
 
   return {
-    setters: [function (_utils) {
+    setters: [function (_lodash) {
+      _ = _lodash.default;
+    }, function (_utils) {
       utils = _utils;
     }, function (_apis) {
       apis = _apis;
     }],
     execute: function () {
-      _onAddTopping = function _onAddTopping(scope) {
-        var length = scope.productFormModal.ingredient.toppings.length;
-        var maxToppingNum = 10;
-        if (length >= maxToppingNum) {
+      _onAddApplicator = function _onAddApplicator(scope) {
+        var length = scope.productFormModal.ingredient.applicators.length;
+        var maxApplicatorNum = 10;
+        if (length >= maxApplicatorNum) {
           return;
         }
-        var topping = {
+        var applicator = {
           id: length + 1,
-          name: "",
+          materials: [{
+            seriseId: 1,
+            materialId: "",
+            oz: null,
+            gramsOnScale: null,
+            gramsTotal: null,
+            tolerance: 0
+          }]
+        };
+        scope.productFormModal.ingredient.applicators.push(applicator);
+      };
+
+      _onAddSubMaterial = function _onAddSubMaterial(scope, topId) {
+        var length = scope.productFormModal.ingredient.applicators[topId - 1].materials.length;
+        var maxMaterialNum = 5;
+        if (length >= maxMaterialNum) {
+          return;
+        }
+        var material = {
+          seriseId: length + 1,
+          materialId: "",
           oz: null,
           gramsOnScale: null,
-          gramsTotal: null
+          gramsTotal: null,
+          tolerance: 0
         };
-        scope.productFormModal.ingredient.toppings.push(topping);
+
+        scope.productFormModal.ingredient.applicators[topId - 1].materials.push(material);
+      };
+
+      isMaterialValid = function isMaterialValid(ingredient, materialsModelList) {
+        var materials = [ingredient.crust.name, ingredient.sauce.name];
+        ingredient.applicators.forEach(function (app) {
+          app.materials.forEach(function (m) {
+            materials.push(m.name);
+          });
+        });
+
+        var diffItems = _.difference(materials, materialsModelList);
+        if (diffItems.length !== 0) {
+          utils.alert('warning', 'Material Not Exists', 'The material ' + diffItems[0] + ' does not exist, please either add it to the material list or select the exact item that the input field suggests');
+          return false;
+        }
+
+        return true;
       };
 
       addPreprocess = function addPreprocess(scope) {
         //init data
+
+        var group = scope.currentFilterGroup === 'All' ? scope.productGroups[0] || "" : scope.currentFilterGroup;
+
         scope.productFormModal = {
-          productGroup: scope.productGroups[0] || "",
+          productGroup: group,
           productId: null,
           productDesc: "",
           comment: "",
@@ -39,29 +83,43 @@ System.register(['./utils', './apis'], function (_export, _context) {
             crust: {
               name: "",
               oz: null,
+              materialId: "",
               gramsOnScale: null,
-              gramsTotal: null
+              gramsTotal: null,
+              tolerance: 0
             },
             sauce: {
               name: "",
               oz: null,
+              materialId: "",
               gramsOnScale: null,
-              gramsTotal: null
+              gramsTotal: null,
+              tolerance: 0
             },
-            toppings: [{
+            applicators: [{
               id: 1,
-              name: "",
-              oz: null,
-              gramsOnScale: null,
-              gramsTotal: null
+              materials: [{
+                seriseId: 1,
+                materialId: "",
+                oz: null,
+                gramsOnScale: null,
+                gramsTotal: null,
+                tolerance: 0
+              }]
             }]
           },
           func: {
-            onAddTopping: function onAddTopping() {
-              _onAddTopping(scope);
+            onAddApplicator: function onAddApplicator() {
+              _onAddApplicator(scope);
             },
-            onRemoveTopping: function onRemoveTopping() {
-              scope.productFormModal.ingredient.toppings.pop();
+            onRemoveApplicator: function onRemoveApplicator() {
+              scope.productFormModal.ingredient.applicators.pop();
+            },
+            onAddSubMaterial: function onAddSubMaterial(topId) {
+              _onAddSubMaterial(scope, topId);
+            },
+            onRemoveSubMaterial: function onRemoveSubMaterial(id) {
+              scope.productFormModal.ingredient.applicators[id - 1].materials.pop();
             }
           },
           submitBtnMsg: 'Submit'
@@ -72,6 +130,10 @@ System.register(['./utils', './apis'], function (_export, _context) {
 
           if (utils.findProductById(scope.products, product.productId).length !== 0) {
             utils.alert('warning', 'Warning', 'Product With Product ID "' + product.productId + '" Already Exists');
+            return;
+          }
+
+          if (!isMaterialValid(product.ingredient, scope.materialsDataList)) {
             return;
           }
 
@@ -103,11 +165,11 @@ System.register(['./utils', './apis'], function (_export, _context) {
           comment: cur.comment || "",
           ingredient: cur.ingredient,
           func: {
-            onAddTopping: function onAddTopping() {
-              _onAddTopping(scope);
+            onAddApplicator: function onAddApplicator() {
+              _onAddApplicator(scope);
             },
-            onRemoveTopping: function onRemoveTopping() {
-              scope.productFormModal.ingredient.toppings.pop();
+            onRemoveApplicator: function onRemoveApplicator() {
+              scope.productFormModal.ingredient.applicators.pop();
             }
           },
           submitBtnMsg: 'Update'
@@ -132,6 +194,10 @@ System.register(['./utils', './apis'], function (_export, _context) {
               utils.alert('warning', 'Warning', 'Product With Product ID "' + product.productId + '" Already Exists');
               return;
             }
+          }
+
+          if (!isMaterialValid(product.ingredient, scope.materialsDataList)) {
+            return;
           }
 
           apis.updateProduct(cur.product_id, product.productGroup, product.productDesc, product.productId, product.comment, product.ingredient, utils.successCallBack('pct-product-form-cancelBtn', 'Product Has Been Updated Successfully', scope), function (e) {

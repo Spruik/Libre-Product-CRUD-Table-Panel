@@ -237,6 +237,19 @@ System.register(['lodash', 'jquery', 'app/plugins/sdk', './transformers', './edi
               this.productGroupsFilter = dataList[1].rows.flat().sort();
             }
 
+            if (dataList[2]) {
+              if (dataList[2].type !== 'table') {
+                utils.alert('error', 'Error', 'To show the product list, please format data as a TABLE in the Metrics Setting');
+                return;
+              }
+              this.materials = utils.getRestructuredData(dataList[2].columns, dataList[2].rows);
+              this.materialsDataList = this.materials.reduce(function (arr, mat) {
+                var item = mat.id + ' | ' + mat.description;
+                arr.push(item);
+                return arr;
+              }, []);
+            }
+
             this.productGroupsFilter.splice(0, 0, 'All');
 
             this.products = utils.getRestructuredProduct(dataList[0].columns, dataList[0].rows);
@@ -394,8 +407,8 @@ System.register(['lodash', 'jquery', 'app/plugins/sdk', './transformers', './edi
 
               appendTableRows(tbodyElem);
               appendPaginationControls(footerElem);
-
-              rootElem.css({ 'max-height': panel.scroll ? getTableHeight() : '' });
+              var height = parseInt(getTableHeight().split('px')[0]) - 38 + 'px';
+              rootElem.css({ 'max-height': panel.scroll ? height : '' });
             }
 
             // hook up link tooltips

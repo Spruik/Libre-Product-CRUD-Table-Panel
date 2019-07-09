@@ -121,4 +121,33 @@
   font-weight: bold;
   font-style: oblique;
 }
+
+.extra-large{
+  max-width: 1000px !important;
+}
+
+#master-data-product-form .row {
+  margin-left: 0px !important;
+  margin-right: 0px !important;
+}
+
+#master-data-product-form .col-lg-9, 
+#master-data-product-form .col-lg-10,
+#master-data-product-form .col-lg-11,
+#master-data-product-form .col-lg-12,
+#master-data-product-form .col-md-9, 
+#master-data-product-form .col-md-10,
+#master-data-product-form .col-md-11, 
+#master-data-product-form .col-md-12,
+#master-data-product-form .col-sm-9, 
+#master-data-product-form .col-sm-10, 
+#master-data-product-form .col-sm-11, 
+#master-data-product-form .col-sm-12,
+#master-data-product-form .col-xs-9,
+#master-data-product-form .col-xs-10,
+#master-data-product-form .col-xs-11,
+#master-data-product-form .col-xs-12{
+  padding-left: 0px !important;
+  padding-right: 0px !important;
+}
   

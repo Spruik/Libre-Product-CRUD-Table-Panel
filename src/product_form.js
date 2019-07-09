@@ -1,24 +1,68 @@
+import _ from 'lodash'
 import * as utils from './utils'
 import * as apis from './apis'
 
-const _onAddTopping = scope => {
-  const length = scope.productFormModal.ingredient.toppings.length
-  const maxToppingNum = 10
-  if (length >= maxToppingNum) { return }
-  const topping = {
+
+const _onAddApplicator = scope => {
+  const length = scope.productFormModal.ingredient.applicators.length
+  const maxApplicatorNum = 10
+  if (length >= maxApplicatorNum) { return }
+  const applicator = {
     id: length + 1,
-    name: "",
+    materials: [
+      {
+        seriseId: 1,
+        materialId: "",
+        oz: null,
+        gramsOnScale: null,
+        gramsTotal: null,
+        tolerance: 0
+      }
+    ]
+  }
+  scope.productFormModal.ingredient.applicators.push(applicator)
+}
+
+const _onAddSubMaterial = (scope, topId) => {
+  const length = scope.productFormModal.ingredient.applicators[topId - 1].materials.length
+  const maxMaterialNum = 5
+  if (length >= maxMaterialNum) { return }
+  const material = {
+    seriseId: length + 1,
+    materialId: "",
     oz: null,
     gramsOnScale: null,
-    gramsTotal: null
+    gramsTotal: null,
+    tolerance: 0
   }
-  scope.productFormModal.ingredient.toppings.push(topping)
+
+  scope.productFormModal.ingredient.applicators[topId - 1].materials.push(material)
+}
+
+const isMaterialValid = (ingredient, materialsModelList) => {
+  let materials = [ingredient.crust.name, ingredient.sauce.name]
+  ingredient.applicators.forEach(app => {
+    app.materials.forEach(m => {
+      materials.push(m.name)
+    })
+  })
+  
+  const diffItems = _.difference(materials, materialsModelList)
+  if (diffItems.length !== 0) {
+    utils.alert('warning', 'Material Not Exists', `The material ${diffItems[0]} does not exist, please either add it to the material list or select the exact item that the input field suggests`)
+    return false
+  }
+
+  return true
 }
 
 const addPreprocess = scope => {
   //init data
+
+  const group = scope.currentFilterGroup === 'All' ? scope.productGroups[0] || "" : scope.currentFilterGroup
+
   scope.productFormModal = {
-    productGroup: scope.productGroups[0] || "",
+    productGroup: group,
     productId: null,
     productDesc: "",
     comment: "",
@@ -26,31 +70,47 @@ const addPreprocess = scope => {
       crust: {
         name: "",
         oz: null,
+        materialId: "",
         gramsOnScale: null,
-        gramsTotal: null
+        gramsTotal: null,
+        tolerance: 0
       },
       sauce: {
         name: "",
         oz: null,
+        materialId: "",
         gramsOnScale: null,
-        gramsTotal: null
+        gramsTotal: null,
+        tolerance: 0
       },
-      toppings: [
+      applicators: [
         {
           id: 1,
-          name: "",
-          oz: null,
-          gramsOnScale: null,
-          gramsTotal: null
+          materials: [
+            {
+              seriseId: 1,
+              materialId: "",
+              oz: null,
+              gramsOnScale: null,
+              gramsTotal: null,
+              tolerance: 0
+            }
+          ]
         }
       ]
     },
     func: {
-      onAddTopping: () => {
-        _onAddTopping(scope)
+      onAddApplicator: () => {
+        _onAddApplicator(scope)
       },
-      onRemoveTopping: () => { 
-        scope.productFormModal.ingredient.toppings.pop() 
+      onRemoveApplicator: () => { 
+        scope.productFormModal.ingredient.applicators.pop() 
+      },
+      onAddSubMaterial: (topId) => {
+        _onAddSubMaterial(scope, topId)
+      },
+      onRemoveSubMaterial: (id) => {
+        scope.productFormModal.ingredient.applicators[id-1].materials.pop() 
       }
     },
     submitBtnMsg: 'Submit'
@@ -63,6 +123,8 @@ const addPreprocess = scope => {
       utils.alert('warning', 'Warning', `Product With Product ID "${product.productId}" Already Exists`)
       return
     }
+
+    if (!isMaterialValid(product.ingredient, scope.materialsDataList)) { return }
 
     apis.addProduct(
       product.productGroup, 
@@ -106,11 +168,11 @@ const updatePreprocess = scope => {
     comment: cur.comment || "",
     ingredient: cur.ingredient,
     func: {
-      onAddTopping: () => {
-        _onAddTopping(scope)
+      onAddApplicator: () => {
+        _onAddApplicator(scope)
       },
-      onRemoveTopping: () => { 
-        scope.productFormModal.ingredient.toppings.pop() 
+      onRemoveApplicator: () => { 
+        scope.productFormModal.ingredient.applicators.pop() 
       }
     },
     submitBtnMsg: 'Update'
@@ -136,6 +198,8 @@ const updatePreprocess = scope => {
         return
       }
     }
+
+    if (!isMaterialValid(product.ingredient, scope.materialsDataList)) { return }
 
     apis.updateProduct(
       cur.product_id,

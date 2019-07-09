@@ -117,11 +117,10 @@ export const showModal = (html, data) => {
   })
 }
 
-
 export const showLargeModal = (html, data) => {
   appEvents.emit('show-modal', {
     src: 'public/plugins/smart-factory-products-crud-table-panel/partials/' + html,
-    modalClass: '',
+    modalClass: 'extra-large',
     model: data
   })
 }
@@ -183,4 +182,23 @@ export const copy = obj => {
 
 export const hasObjectChanged = (oldObj, newObj) => {
   return JSON.stringify(oldObj) !== JSON.stringify(newObj)
+}
+
+export const getRestructuredData = (rawCols, rows) => {
+  let data = []
+  let cols = rawCols.reduce((arr, c) => {
+    const col = c.text.toLowerCase()
+    arr.push(col)
+    return arr
+  }, [])
+  for (let i = 0; i < rows.length; i++) {
+    const row = rows[i];
+    let serise = {}
+    for (let k = 0; k < cols.length; k++) {
+        const col = cols[k];
+        serise[col] = row[k]
+    }
+    data.push(serise)
+  }
+  return data
 }

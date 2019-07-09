@@ -3,7 +3,7 @@
 System.register(['app/core/core'], function (_export, _context) {
   "use strict";
 
-  var appEvents, hostname, postgRestHost, influxHost, post, remove, get, update, alert, showModal, showLargeModal, spaceCheck, successCallBack, failCallBack, getRestructuredProduct, findProductById, getDimension, copy, hasObjectChanged;
+  var appEvents, hostname, postgRestHost, influxHost, post, remove, get, update, alert, showModal, showLargeModal, spaceCheck, successCallBack, failCallBack, getRestructuredProduct, findProductById, getDimension, copy, hasObjectChanged, getRestructuredData;
   return {
     setters: [function (_appCoreCore) {
       appEvents = _appCoreCore.appEvents;
@@ -155,7 +155,7 @@ System.register(['app/core/core'], function (_export, _context) {
       _export('showLargeModal', showLargeModal = function showLargeModal(html, data) {
         appEvents.emit('show-modal', {
           src: 'public/plugins/smart-factory-products-crud-table-panel/partials/' + html,
-          modalClass: '',
+          modalClass: 'extra-large',
           model: data
         });
       });
@@ -240,6 +240,27 @@ System.register(['app/core/core'], function (_export, _context) {
       });
 
       _export('hasObjectChanged', hasObjectChanged);
+
+      _export('getRestructuredData', getRestructuredData = function getRestructuredData(rawCols, rows) {
+        var data = [];
+        var cols = rawCols.reduce(function (arr, c) {
+          var col = c.text.toLowerCase();
+          arr.push(col);
+          return arr;
+        }, []);
+        for (var i = 0; i < rows.length; i++) {
+          var row = rows[i];
+          var serise = {};
+          for (var k = 0; k < cols.length; k++) {
+            var col = cols[k];
+            serise[col] = row[k];
+          }
+          data.push(serise);
+        }
+        return data;
+      });
+
+      _export('getRestructuredData', getRestructuredData);
     }
   };
 });
