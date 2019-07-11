@@ -170,7 +170,7 @@ System.register(['lodash', 'jquery', 'app/plugins/sdk', './transformers', './edi
                 return '';
               }
             });
-            $scope.ctrl.currentProduct = utils.findProductById($scope.ctrl.products, rowData[1])[0];
+            $scope.ctrl.currentProduct = utils.findProductById($scope.ctrl.products, rowData[2])[0];
             product.showProductOptionsModal($scope.ctrl);
           });
           return _this;
@@ -272,6 +272,11 @@ System.register(['lodash', 'jquery', 'app/plugins/sdk', './transformers', './edi
                 }
               }
             }
+
+            if (this.currentFilterGroup !== 'All') {
+              this.onGroupFilterChange();
+            }
+
             this.render();
           }
         }, {
@@ -295,8 +300,6 @@ System.register(['lodash', 'jquery', 'app/plugins/sdk', './transformers', './edi
               this.dataRaw[0].rows = this.dataRaw[0].rows.filter(function (row) {
                 return row[_this2.productDimension.indexOf('product_group')] === _this2.currentFilterGroup;
               });
-            } else {
-              this.refresh();
             }
 
             this.render();

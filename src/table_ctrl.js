@@ -80,7 +80,7 @@ export class TableCtrl extends MetricsPanelCtrl {
           return ''
         }
       })
-      $scope.ctrl.currentProduct = utils.findProductById($scope.ctrl.products, rowData[1])[0]
+      $scope.ctrl.currentProduct = utils.findProductById($scope.ctrl.products, rowData[2])[0]
       product.showProductOptionsModal($scope.ctrl)
     })
   }
@@ -177,7 +177,12 @@ export class TableCtrl extends MetricsPanelCtrl {
         }
       }
     }
-    this.render();
+
+    if(this.currentFilterGroup !== 'All') {
+      this.onGroupFilterChange()
+    }
+
+    this.render()
   }
 
   onAddButtonClick() {
@@ -194,8 +199,6 @@ export class TableCtrl extends MetricsPanelCtrl {
 
     if(this.currentFilterGroup !== 'All') {
       this.dataRaw[0].rows = this.dataRaw[0].rows.filter(row => row[this.productDimension.indexOf('product_group')] === this.currentFilterGroup)
-    }else {
-      this.refresh()
     }
 
     this.render()

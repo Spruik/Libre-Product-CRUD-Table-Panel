@@ -170,6 +170,12 @@ System.register(['lodash', './utils', './apis'], function (_export, _context) {
             },
             onRemoveApplicator: function onRemoveApplicator() {
               scope.productFormModal.ingredient.applicators.pop();
+            },
+            onAddSubMaterial: function onAddSubMaterial(topId) {
+              _onAddSubMaterial(scope, topId);
+            },
+            onRemoveSubMaterial: function onRemoveSubMaterial(id) {
+              scope.productFormModal.ingredient.applicators[id - 1].materials.pop();
             }
           },
           submitBtnMsg: 'Update'

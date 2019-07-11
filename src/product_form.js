@@ -173,6 +173,12 @@ const updatePreprocess = scope => {
       },
       onRemoveApplicator: () => { 
         scope.productFormModal.ingredient.applicators.pop() 
+      },
+      onAddSubMaterial: (topId) => {
+        _onAddSubMaterial(scope, topId)
+      },
+      onRemoveSubMaterial: (id) => {
+        scope.productFormModal.ingredient.applicators[id-1].materials.pop() 
       }
     },
     submitBtnMsg: 'Update'
