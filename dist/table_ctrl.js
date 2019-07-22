@@ -170,8 +170,15 @@ System.register(['lodash', 'jquery', 'app/plugins/sdk', './transformers', './edi
                 return '';
               }
             });
-            $scope.ctrl.currentProduct = utils.findProductById($scope.ctrl.products, rowData[2])[0];
-            product.showProductOptionsModal($scope.ctrl);
+
+            var idIndex = $scope.ctrl.colDimensions.indexOf("product_id");
+            if (!~idIndex) {
+              utils.alert('error', 'Error', 'Get not get this product from the database because PRODUCT ID NOT FOUND, please contact the dev team or try to NOT hide the product id column');
+              return;
+            } else {
+              $scope.ctrl.currentProduct = utils.findProductById($scope.ctrl.products, rowData[idIndex])[0];
+              product.showProductOptionsModal($scope.ctrl);
+            }
           });
           return _this;
         }
@@ -412,6 +419,15 @@ System.register(['lodash', 'jquery', 'app/plugins/sdk', './transformers', './edi
               appendPaginationControls(footerElem);
               var height = parseInt(getTableHeight().split('px')[0]) - 38 + 'px';
               rootElem.css({ 'max-height': panel.scroll ? height : '' });
+
+              // get current table column dimensions 
+              if (ctrl.table.columns) {
+                ctrl.colDimensions = ctrl.table.columns.filter(function (x) {
+                  return !x.hidden;
+                }).map(function (x) {
+                  return x.text;
+                });
+              }
             }
 
             // hook up link tooltips

@@ -133,6 +133,11 @@ System.register(['lodash', './utils', './apis'], function (_export, _context) {
             return;
           }
 
+          if (utils.findProductByDesc(scope.products, product.productDesc).length !== 0) {
+            utils.alert('warning', 'Warning', 'Product With Product Description "' + product.productDesc + '" Already Exists');
+            return;
+          }
+
           if (!isMaterialValid(product.ingredient, scope.materialsDataList)) {
             return;
           }

@@ -172,6 +172,10 @@ export const findProductById = (products, key) => {
   return products.filter(product => product.product_id === key)
 }
 
+export const findProductByDesc = (products, key) => {
+  return products.filter(product => product.product_desc === key)
+}
+
 export const getDimension = cols => {
   return cols.map(col => col.text)
 }

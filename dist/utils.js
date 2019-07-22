@@ -3,7 +3,7 @@
 System.register(['app/core/core'], function (_export, _context) {
   "use strict";
 
-  var appEvents, hostname, postgRestHost, influxHost, post, remove, get, update, alert, showModal, showLargeModal, spaceCheck, successCallBack, failCallBack, getRestructuredProduct, findProductById, getDimension, copy, hasObjectChanged, getRestructuredData;
+  var appEvents, hostname, postgRestHost, influxHost, post, remove, get, update, alert, showModal, showLargeModal, spaceCheck, successCallBack, failCallBack, getRestructuredProduct, findProductById, findProductByDesc, getDimension, copy, hasObjectChanged, getRestructuredData;
   return {
     setters: [function (_appCoreCore) {
       appEvents = _appCoreCore.appEvents;
@@ -220,6 +220,14 @@ System.register(['app/core/core'], function (_export, _context) {
       });
 
       _export('findProductById', findProductById);
+
+      _export('findProductByDesc', findProductByDesc = function findProductByDesc(products, key) {
+        return products.filter(function (product) {
+          return product.product_desc === key;
+        });
+      });
+
+      _export('findProductByDesc', findProductByDesc);
 
       _export('getDimension', getDimension = function getDimension(cols) {
         return cols.map(function (col) {
