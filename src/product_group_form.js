@@ -11,8 +11,8 @@ const addPreprocess = scope => {
   scope.productGroupFormModal.onSubmit = () => {
     apis.addProductGroup(
       scope.productGroupFormModal.groupName,
-      utils.successCallBack('pct-product-group-form-cancelBtn', 'Product Group Has Been Added Successfully', scope),
-      e => utils.failCallBack('pct-product-group-form-cancelBtn', `An Error Occurr While Adding The Product Group Due To ${e}`)
+      utils.successCallBack('pct-product-group-form-cancelBtn', 'Brand Product Line Has Been Added Successfully', scope),
+      e => utils.failCallBack('pct-product-group-form-cancelBtn', `An Error Occurr While Adding The Brand Product Line Due To ${e}`)
     )
   }
 }
@@ -35,13 +35,14 @@ const updatePreprocess = scope => {
     }else {
       //Validation OK!
       scope.confirmModal = {
-        confirmMsg: "Please note that after changing the name of this product group, all its children's product group name will also be changed",
+        confirmMsg: "Please note that after changing the name of this brand product line, all its children's brand product line name will also be changed",
         onConfirm: () => {
           apis.updateProductGroup(
+            scope,
             toBeUpdated, 
             groupName,
-            utils.successCallBack('pct-confirm-modal-cancelBtn', 'Product Group Has Been Updated Successfully', scope),
-            e => utils.failCallBack('pct-confirm-modal-cancelBtn', `An Error Occurr While Updating The Product Group Due To ${e}`)
+            utils.successCallBack('pct-confirm-modal-cancelBtn', 'Brand Product Line Has Been Updated Successfully', scope),
+            e => utils.failCallBack('pct-confirm-modal-cancelBtn', `An Error Occurr While Updating The Brand Product Line Due To ${e}`)
           )
         }
       }
@@ -60,12 +61,12 @@ const removePreprocess = scope => {
   scope.productGroupFormModal.onRemove = () => {
     const toBeRemoved = scope.productGroupFormModal.toBeRemoved
     scope.confirmModal = {
-      confirmMsg: "Please note that after removing this product group, all its children will also be removed",
+      confirmMsg: "Please note that after removing this brand product line, all its children will also be removed",
       onConfirm: () => {
         apis.removeProductGroup(
           toBeRemoved, 
-          utils.successCallBack('pct-confirm-modal-cancelBtn', 'Product Group Has Been Removed Successfully', scope),
-          e => utils.failCallBack('pct-confirm-modal-cancelBtn', `An Error Occurr While Removing The Product Group Due To ${e}`)
+          utils.successCallBack('pct-confirm-modal-cancelBtn', 'Brand Produt Line Has Been Removed Successfully', scope),
+          e => utils.failCallBack('pct-confirm-modal-cancelBtn', `An Error Occurr While Removing The Brand Product Line Due To ${e}`)
         )
       }
     }

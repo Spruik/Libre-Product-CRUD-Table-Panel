@@ -19,8 +19,8 @@ System.register(['./utils', './apis'], function (_export, _context) {
         };
 
         scope.productGroupFormModal.onSubmit = function () {
-          apis.addProductGroup(scope.productGroupFormModal.groupName, utils.successCallBack('pct-product-group-form-cancelBtn', 'Product Group Has Been Added Successfully', scope), function (e) {
-            return utils.failCallBack('pct-product-group-form-cancelBtn', 'An Error Occurr While Adding The Product Group Due To ' + e);
+          apis.addProductGroup(scope.productGroupFormModal.groupName, utils.successCallBack('pct-product-group-form-cancelBtn', 'Brand Product Line Has Been Added Successfully', scope), function (e) {
+            return utils.failCallBack('pct-product-group-form-cancelBtn', 'An Error Occurr While Adding The Brand Product Line Due To ' + e);
           });
         };
       };
@@ -43,10 +43,10 @@ System.register(['./utils', './apis'], function (_export, _context) {
           } else {
             //Validation OK!
             scope.confirmModal = {
-              confirmMsg: "Please note that after changing the name of this product group, all its children's product group name will also be changed",
+              confirmMsg: "Please note that after changing the name of this brand product line, all its children's brand product line name will also be changed",
               onConfirm: function onConfirm() {
-                apis.updateProductGroup(toBeUpdated, groupName, utils.successCallBack('pct-confirm-modal-cancelBtn', 'Product Group Has Been Updated Successfully', scope), function (e) {
-                  return utils.failCallBack('pct-confirm-modal-cancelBtn', 'An Error Occurr While Updating The Product Group Due To ' + e);
+                apis.updateProductGroup(scope, toBeUpdated, groupName, utils.successCallBack('pct-confirm-modal-cancelBtn', 'Brand Product Line Has Been Updated Successfully', scope), function (e) {
+                  return utils.failCallBack('pct-confirm-modal-cancelBtn', 'An Error Occurr While Updating The Brand Product Line Due To ' + e);
                 });
               }
             };
@@ -65,10 +65,10 @@ System.register(['./utils', './apis'], function (_export, _context) {
         scope.productGroupFormModal.onRemove = function () {
           var toBeRemoved = scope.productGroupFormModal.toBeRemoved;
           scope.confirmModal = {
-            confirmMsg: "Please note that after removing this product group, all its children will also be removed",
+            confirmMsg: "Please note that after removing this brand product line, all its children will also be removed",
             onConfirm: function onConfirm() {
-              apis.removeProductGroup(toBeRemoved, utils.successCallBack('pct-confirm-modal-cancelBtn', 'Product Group Has Been Removed Successfully', scope), function (e) {
-                return utils.failCallBack('pct-confirm-modal-cancelBtn', 'An Error Occurr While Removing The Product Group Due To ' + e);
+              apis.removeProductGroup(toBeRemoved, utils.successCallBack('pct-confirm-modal-cancelBtn', 'Brand Produt Line Has Been Removed Successfully', scope), function (e) {
+                return utils.failCallBack('pct-confirm-modal-cancelBtn', 'An Error Occurr While Removing The Brand Product Line Due To ' + e);
               });
             }
           };

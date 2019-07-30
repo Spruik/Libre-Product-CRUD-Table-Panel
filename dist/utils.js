@@ -215,7 +215,7 @@ System.register(['app/core/core'], function (_export, _context) {
 
       _export('findProductById', findProductById = function findProductById(products, key) {
         return products.filter(function (product) {
-          return product.product_id === key;
+          return product.id === key;
         });
       });
 

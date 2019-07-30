@@ -150,4 +150,8 @@
   padding-left: 0px !important;
   padding-right: 0px !important;
 }
+
+.col-header-label label{
+  font-size: 12px;
+}
   

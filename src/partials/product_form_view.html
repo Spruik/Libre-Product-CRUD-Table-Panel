@@ -40,40 +40,14 @@
       <div id="datalist-production-line" class="row form-group ptc-pf" style="margin-bottom: 8px">
         <label class="col-lg-2 col-md-2 col-sm-2 col-xs-2"> </label>
         <div style="margin-bottom: 3px" class="col-lg-10 col-md-10 col-sm-10 col-xs-10 row">
-          <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 row">
-            <label class="col-lg-5 col-md-5 col-sm-5 col-xs-5">Material</label>
-            <label class="col-lg-1 col-md-1 col-sm-1 col-xs-1">Oz</label>
-            <label class="col-lg-2 col-md-2 col-sm-2 col-xs-2">Grams On Scale</label>            
-            <label class="col-lg-2 col-md-2 col-sm-2 col-xs-2">Grams Total</label>  
-            <label class="col-lg-2 col-md-2 col-sm-2 col-xs-2">Tolerance</label>
-          </div>
-        </div>
-      </div>
-
-      <!-- Crust -->
-      <div id="datalist-production-line" class="row form-group ptc-pf" style="margin-bottom: 3px">
-        <label class="col-lg-2 col-md-2 col-sm-2 col-xs-2" style="margin-top: 7px;">Crust</label>
-        <div style="margin-bottom: 3px" class="col-lg-10 col-md-10 col-sm-10 col-xs-10 row">
-          <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 row">
-            <input class="md-products-datalist-input col-lg-5 col-md-5 col-sm-5 col-xs-5" type="text" placeholder="&#61442; Search for Material" ng-model="model.productFormViewModal.ingredient.crust.name" readonly>
-            <input class="md-products-datalist-input col-lg-1 col-md-1 col-sm-1 col-xs-1" type="number" ng-model="model.productFormViewModal.ingredient.crust.oz" readonly>
-            <input class="md-products-datalist-input col-lg-2 col-md-2 col-sm-2 col-xs-2" type="number" ng-model="model.productFormViewModal.ingredient.crust.gramsOnScale" readonly>
-            <input class="md-products-datalist-input col-lg-2 col-md-2 col-sm-2 col-xs-2" type="number" ng-model="model.productFormViewModal.ingredient.crust.gramsTotal" readonly>
-            <input class="md-products-datalist-input col-lg-2 col-md-2 col-sm-2 col-xs-2" type="number" ng-model="model.productFormViewModal.ingredient.crust.tolerance" readonly>
-          </div>
-        </div>
-      </div>
-
-      <!-- Sauce -->
-      <div id="datalist-production-line" class="row form-group ptc-pf" style="margin-bottom: 3px">
-        <label class="col-lg-2 col-md-2 col-sm-2 col-xs-2" style="margin-top: 7px;">Sauce</label>
-        <div style="margin-bottom: 3px" class="col-lg-10 col-md-10 col-sm-10 col-xs-10 row">
-          <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 row">
-            <input class="md-products-datalist-input col-lg-5 col-md-5 col-sm-5 col-xs-5" type="text" placeholder="&#61442; Search for Material" ng-model="model.productFormViewModal.ingredient.sauce.name" readonly>
-            <input class="md-products-datalist-input col-lg-1 col-md-1 col-sm-1 col-xs-1" type="number" ng-model="model.productFormViewModal.ingredient.sauce.oz" readonly>
-            <input class="md-products-datalist-input col-lg-2 col-md-2 col-sm-2 col-xs-2" type="number" ng-model="model.productFormViewModal.ingredient.sauce.gramsOnScale" readonly>
-            <input class="md-products-datalist-input col-lg-2 col-md-2 col-sm-2 col-xs-2" type="number" ng-model="model.productFormViewModal.ingredient.sauce.gramsTotal" readonly>
-            <input class="md-products-datalist-input col-lg-2 col-md-2 col-sm-2 col-xs-2" type="number" ng-model="model.productFormViewModal.ingredient.sauce.tolerance" readonly>
+          <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 row col-header-label">
+              <label class="col-lg-4 col-md-4 col-sm-4 col-xs-4">Material</label>
+              <label class="col-lg-1 col-md-1 col-sm-1 col-xs-1">Oz</label>
+              <label class="col-lg-2 col-md-2 col-sm-2 col-xs-2">Grams On Scale</label> 
+              <label class="col-lg-2 col-md-2 col-sm-2 col-xs-2">Grams Total</label>          
+              <label class="col-lg-1 col-md-1 col-sm-1 col-xs-1">Tol</label>
+              <label class="col-lg-1 col-md-1 col-sm-1 col-xs-1">Target Tol</label>
+              <label class="col-lg-1 col-md-1 col-sm-1 col-xs-1">Target GOS</label>
           </div>
         </div>
       </div>
@@ -84,7 +58,7 @@
       <div id="datalist-production-line" ng-repeat="applicator in model.productFormViewModal.ingredient.applicators" class="row form-group ptc-pf" style="margin-bottom: 3px">
 
         <label class="col-lg-2 col-md-2 col-sm-2 col-xs-2" style="margin-top: 7px" style="margin-top: 7px;">
-          <span>#{{$index + 1}}</span>
+          <span>{{applicator.operation}}</span>
         </label>
 
         <div ng-repeat="material in applicator.materials" style="margin-bottom: 3px" ng-class="{'col-lg-10 col-md-10 col-sm-10 col-xs-10': $first, 'col-lg-12 col-md-12 col-sm-12 col-xs-12': $index !== 0}" style="padding-left: 0px; padding-right: 0px;" class="row form-group ptc-pf">
@@ -92,20 +66,24 @@
           <div ng-if="$index !== 0" class="row col-lg-12 col-md-12 col-sm-12 col-xs-12" style="padding-left: 0px; padding-right: 0px;"> 
             <label class="col-lg-2 col-md-2 col-sm-2 col-xs-2" style="margin-top: 7px;">.{{$index}}</label>
             <div class="row col-lg-10 col-md-10 col-sm-10 col-xs-10">
-              <input class="md-products-datalist-input col-lg-5 col-md-5 col-sm-5 col-xs-5" type="text" placeholder="&#61442; Search for Material" ng-model="material.name" readonly>
+              <input class="md-products-datalist-input col-lg-4 col-md-4 col-sm-4 col-xs-4" type="text" placeholder="&#61442; Search for Material" ng-model="material.name" readonly>
               <input class="md-products-datalist-input col-lg-1 col-md-1 col-sm-1 col-xs-1" type="number" ng-model="material.oz" readonly>
               <input class="md-products-datalist-input col-lg-2 col-md-2 col-sm-2 col-xs-2" type="number" ng-model="material.gramsOnScale" readonly>
               <input class="md-products-datalist-input col-lg-2 col-md-2 col-sm-2 col-xs-2" type="number" ng-model="material.gramsTotal" readonly>
-              <input class="md-products-datalist-input col-lg-2 col-md-2 col-sm-2 col-xs-2" type="number" ng-model="material.tolerance" readonly>
+              <input class="md-products-datalist-input col-lg-1 col-md-1 col-sm-1 col-xs-1" type="number" ng-model="material.tolerance" readonly>
+              <span class="col-lg-1 col-md-1 col-sm-1 col-xs-1"></span>
+              <span class="col-lg-1 col-md-1 col-sm-1 col-xs-1"></span>
             </div> 
           </div>
 
           <div ng-if="$index === 0" class="row col-lg-12 col-md-12 col-sm-12 col-xs-12" style="padding-left: 0px; padding-right: 0px;"> 
-            <input class="md-products-datalist-input col-lg-5 col-md-5 col-sm-5 col-xs-5" type="text" placeholder="&#61442; Search for Material" ng-model="material.name" readonly>
+            <input class="md-products-datalist-input col-lg-4 col-md-4 col-sm-4 col-xs-4" type="text" placeholder="&#61442; Search for Material" ng-model="material.name" readonly>
             <input class="md-products-datalist-input col-lg-1 col-md-1 col-sm-1 col-xs-1" type="number" ng-model="material.oz" readonly>
             <input class="md-products-datalist-input col-lg-2 col-md-2 col-sm-2 col-xs-2" type="number" ng-model="material.gramsOnScale" readonly>
             <input class="md-products-datalist-input col-lg-2 col-md-2 col-sm-2 col-xs-2" type="number" ng-model="material.gramsTotal" readonly>
-            <input class="md-products-datalist-input col-lg-2 col-md-2 col-sm-2 col-xs-2" type="number" ng-model="material.tolerance" readonly>
+            <input class="md-products-datalist-input col-lg-1 col-md-1 col-sm-1 col-xs-1" type="number" ng-model="material.tolerance" readonly>
+            <input class="md-products-datalist-input col-lg-1 col-md-1 col-sm-1 col-xs-1" type="number" ng-model="applicator.targetTol" readonly>
+            <input class="md-products-datalist-input col-lg-1 col-md-1 col-sm-1 col-xs-1" type="number" ng-model="applicator.targetGOS" readonly>
           </div>
 
         </div>
@@ -123,8 +101,7 @@
           type="textarea"
           class="col-lg-7 col-md-7 col-sm-7 col-xs-7"
           rows="3"
-          style="width: 100%; border: solid .1px lightgray; resize: none"
-          placeholder="Any comments (e.g. Better run on line 1) - Maximun 250 Characters"
+          style="width: 100%; border: solid 1px lightgray; resize: none; border-radius: 5px"
           maxlength="250"
           ng-model="model.productFormViewModal.comment"
           readonly

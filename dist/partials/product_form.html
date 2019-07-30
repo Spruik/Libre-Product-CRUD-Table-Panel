@@ -18,11 +18,11 @@
     <div class="modal-content" id="modal-modal-content" style="max-height:600px; overflow-y:scroll">
 
       <div id="datalist-production-line" class="row form-group ptc-pf" style="margin-bottom: 10px">
-        <label class="col-lg-4 col-md-4 col-sm-4 col-xs-4" style="margin-top: 7px;">Product Group:</label>
+        <label class="col-lg-4 col-md-4 col-sm-4 col-xs-4" style="margin-top: 7px;">Brand Product Line:</label>
         <select class="md-products-datalist-input col-lg-7 col-md-7 col-sm-7 col-xs-7" required ng-if="model.productGroups.length !== 0" style="width: 100%" ng-model="model.productFormModal.productGroup">
           <option ng-repeat="group in model.productGroups" value="{{group}}">{{group}}</option>
         </select> 
-        <label class="col-lg-7 col-md-7 col-sm-7 col-xs-7" ng-if="model.productGroups.length === 0" style="margin-top: 7px; color: lightcoral;">Please create a product group before creating a product</label>
+        <label class="col-lg-7 col-md-7 col-sm-7 col-xs-7" ng-if="model.productGroups.length === 0" style="margin-top: 7px; color: lightcoral;">Please create a brand product line before creating a product</label>
       </div>
 
       <!-- -------- -->
@@ -32,7 +32,7 @@
       <!-- ID -->
       <div id="datalist-production-line" class="row form-group ptc-pf" style="margin-bottom: 10px">
         <label class="col-lg-4 col-md-4 col-sm-4 col-xs-4" style="margin-top: 7px;">Product ID:</label>
-        <input class="md-products-datalist-input col-lg-7 col-md-7 col-sm-7 col-xs-7" type="tel" pattern="[0-9]*" maxlength="20" ng-model="model.productFormModal.productId" placeholder="Product ID" required>
+        <input class="md-products-datalist-input col-lg-7 col-md-7 col-sm-7 col-xs-7" type="tel" pattern="[0-9]*" maxlength="20" ng-model="model.productFormModal.id" placeholder="Product ID" required>
       </div>
 
       <!-- Product Desc -->
@@ -48,42 +48,18 @@
       <div id="datalist-production-line" class="row form-group ptc-pf" style="margin-bottom: 8px">
         <label class="col-lg-2 col-md-2 col-sm-2 col-xs-2" ng-click="model.productFormModal.func.onAddApplicator()" style="color: lightseagreen; cursor: pointer;">Add +</label>
         <div style="margin-bottom: 3px" class="col-lg-10 col-md-10 col-sm-10 col-xs-10 row">
-          <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 row">
-            <label class="col-lg-5 col-md-5 col-sm-5 col-xs-5">Material</label>
+          <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 row col-header-label">
+            <label class="col-lg-4 col-md-4 col-sm-4 col-xs-4">Material</label>
             <label class="col-lg-1 col-md-1 col-sm-1 col-xs-1">Oz</label>
-            <label class="col-lg-2 col-md-2 col-sm-2 col-xs-2">Grams On Scale</label>            
-            <label class="col-lg-2 col-md-2 col-sm-2 col-xs-2">Grams Total</label>  
-            <label class="col-lg-2 col-md-2 col-sm-2 col-xs-2">Tolerance</label>
-          </div>
-        </div>
-      </div>
-
-      <!-- Crust -->
-      <div id="datalist-production-line" class="row form-group ptc-pf" style="margin-bottom: 3px">
-        <label class="col-lg-2 col-md-2 col-sm-2 col-xs-2" style="margin-top: 7px;">Crust</label>
-        <div style="margin-bottom: 3px" class="col-lg-10 col-md-10 col-sm-10 col-xs-10 row">
-          <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 row">
-            <input class="md-products-datalist-input col-lg-5 col-md-5 col-sm-5 col-xs-5" type="text" placeholder="&#61442; Search for Material" list='dataList' ng-model="model.productFormModal.ingredient.crust.name" ng-change="model.productFormModal.ingredient.crust.materialId = model.productFormModal.ingredient.crust.name.split(' | ')[0]" required>
-            <input class="md-products-datalist-input col-lg-1 col-md-1 col-sm-1 col-xs-1" type="number" ng-model="model.productFormModal.ingredient.crust.oz" required>
-            <input class="md-products-datalist-input col-lg-2 col-md-2 col-sm-2 col-xs-2" type="number" ng-model="model.productFormModal.ingredient.crust.gramsOnScale" required>
-            <input class="md-products-datalist-input col-lg-2 col-md-2 col-sm-2 col-xs-2" type="number" ng-model="model.productFormModal.ingredient.crust.gramsTotal" required>
-            <input class="md-products-datalist-input col-lg-2 col-md-2 col-sm-2 col-xs-2" type="number" ng-model="model.productFormModal.ingredient.crust.tolerance" required>
-            <input hidden class="md-products-datalist-input col-lg-2 col-md-2 col-sm-2 col-xs-2" type="text" ng-model="model.productFormModal.ingredient.crust.materialId">
-          </div>
-        </div>
-      </div>
-
-      <!-- Sauce -->
-      <div id="datalist-production-line" class="row form-group ptc-pf" style="margin-bottom: 3px">
-        <label class="col-lg-2 col-md-2 col-sm-2 col-xs-2" style="margin-top: 7px;">Sauce</label>
-        <div style="margin-bottom: 3px" class="col-lg-10 col-md-10 col-sm-10 col-xs-10 row">
-          <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 row">
-            <input class="md-products-datalist-input col-lg-5 col-md-5 col-sm-5 col-xs-5" type="text" placeholder="&#61442; Search for Material" list='dataList' ng-change="model.productFormModal.ingredient.sauce.materialId = model.productFormModal.ingredient.sauce.name.split(' | ')[0]" ng-model="model.productFormModal.ingredient.sauce.name" required>
-            <input class="md-products-datalist-input col-lg-1 col-md-1 col-sm-1 col-xs-1" type="number" ng-model="model.productFormModal.ingredient.sauce.oz" required>
-            <input class="md-products-datalist-input col-lg-2 col-md-2 col-sm-2 col-xs-2" type="number" ng-model="model.productFormModal.ingredient.sauce.gramsOnScale" required>
-            <input class="md-products-datalist-input col-lg-2 col-md-2 col-sm-2 col-xs-2" type="number" ng-model="model.productFormModal.ingredient.sauce.gramsTotal" required>
-            <input class="md-products-datalist-input col-lg-2 col-md-2 col-sm-2 col-xs-2" type="number" ng-model="model.productFormModal.ingredient.sauce.tolerance" required>
-            <input hidden class="md-products-datalist-input col-lg-2 col-md-2 col-sm-2 col-xs-2" type="text" ng-model="model.productFormModal.ingredient.sauce.materialId">
+            <label class="col-lg-2 col-md-2 col-sm-2 col-xs-2">Grams On Scale</label> 
+            <div class="col-lg-2 col-md-2 col-sm-2 col-xs-2">
+              <span>
+                  <label>Grams Total <span><input type="checkbox" ng-model="model.productFormModal.isTotalCalcOn" ng-change="model.productFormModal.func.onTotalCheckChanged()" /></span></label>
+              </span>
+            </div>           
+            <label class="col-lg-1 col-md-1 col-sm-1 col-xs-1">Tol</label>
+            <label class="col-lg-1 col-md-1 col-sm-1 col-xs-1">Target Tol</label>
+            <label class="col-lg-1 col-md-1 col-sm-1 col-xs-1">Target GOS</label>
           </div>
         </div>
       </div>
@@ -96,12 +72,20 @@
           <option ng-repeat="v in model.materialsDataList" value="{{v}}"></option>
         </datalist>
 
-        <label class="col-lg-2 col-md-2 col-sm-2 col-xs-2" style="margin-top: 7px" title="Click to remove the last applicator" ng-if="$index === model.productFormModal.ingredient.applicators.length - 1">
-          <span ng-click="model.productFormModal.func.onRemoveApplicator()"  style="margin-top: 7px; color: lightcoral; cursor: pointer;">#{{$index + 1}}</span>
-          <span class="" style="color: lightseagreen; cursor: pointer;" ng-click="model.productFormModal.func.onAddSubMaterial($index + 1)"> +</span>
-        </label>
-        <label class="col-lg-2 col-md-2 col-sm-2 col-xs-2" style="margin-top: 7px" ng-if="$index !== model.productFormModal.ingredient.applicators.length - 1" style="margin-top: 7px;">
-          <span>#{{$index + 1}}</span>
+        <label class="col-lg-2 col-md-2 col-sm-2 col-xs-2" style="margin-top: 0px" style="margin-top: 7px;">
+          <span ng-if="$index === model.productFormModal.ingredient.applicators.length - 1" ng-click="model.productFormModal.func.onRemoveApplicator()"  style="margin-top: 7px; color: lightcoral; cursor: pointer;">- </span>
+          <span ng-if="$index !== model.productFormModal.ingredient.applicators.length - 1">&nbsp; </span>
+          <span>
+            <select class="md-products-datalist-input" 
+              required 
+              style="width: 80%; text-align-last: center" 
+              ng-model="applicator.operation" 
+              ng-change="applicator.operationId = model.productFormModal.func.onOperationChanged(applicator.operation, 'id');
+              applicator.operationSeq = model.productFormModal.func.onOperationChanged(applicator.operation, 'seq');"
+            >
+              <option ng-repeat="seq in model.operationSeqList" value="{{seq}}">{{seq}}</option>
+            </select> 
+          </span>
           <span class="" style="color: lightseagreen; cursor: pointer;" ng-click="model.productFormModal.func.onAddSubMaterial($index + 1)"> +</span>
         </label>
 
@@ -113,21 +97,69 @@
               <span ng-click="model.productFormModal.func.onRemoveSubMaterial(applicator.id)" style="color: lightcoral; cursor: pointer;">.{{$index}}</span>
             </label>
             <div class="row col-lg-10 col-md-10 col-sm-10 col-xs-10">
-              <input class="md-products-datalist-input col-lg-5 col-md-5 col-sm-5 col-xs-5" type="text" placeholder="&#61442; Search for Material" list="dataList1" ng-model="material.name" ng-change="material.materialId = material.name.split(' | ')[0]" required>
-              <input class="md-products-datalist-input col-lg-1 col-md-1 col-sm-1 col-xs-1" type="number" ng-model="material.oz" required>
-              <input class="md-products-datalist-input col-lg-2 col-md-2 col-sm-2 col-xs-2" type="number" ng-model="material.gramsOnScale" required>
-              <input class="md-products-datalist-input col-lg-2 col-md-2 col-sm-2 col-xs-2" type="number" ng-model="material.gramsTotal" required>
-              <input class="md-products-datalist-input col-lg-2 col-md-2 col-sm-2 col-xs-2" type="number" ng-model="material.tolerance" required>
+              <input class="md-products-datalist-input col-lg-4 col-md-4 col-sm-4 col-xs-4" style="padding: 0px; text-align-last:center" type="text" placeholder="&#61442; Search for Material" list="dataList1" ng-model="material.name" ng-change="material.materialId = model.productFormModal.func.onMaterialChanged(material.name)" required>
+              <input class="md-products-datalist-input col-lg-1 col-md-1 col-sm-1 col-xs-1" type="number" step="any" ng-model="material.oz" ng-change="material.oz = model.productFormModal.func.toFixed(material.oz)" required>
+              <input class="md-products-datalist-input col-lg-2 col-md-2 col-sm-2 col-xs-2" 
+                type="number" 
+                step="any" 
+                ng-model="material.gramsOnScale" 
+                ng-change="material.gramsOnScale = model.productFormModal.func.toFixed(material.gramsOnScale);
+                  applicator.targetGOS = model.productFormModal.func.onScaleChanged(applicator, 'gos');" 
+                required
+              >
+              <input class="md-products-datalist-input col-lg-2 col-md-2 col-sm-2 col-xs-2" 
+                type="number" 
+                step="any" 
+                ng-model="material.gramsTotal" 
+                ng-readonly="material.meta.isTotalReadOnly && model.productFormModal.isTotalCalcOn" 
+                ng-dblclick="model.productFormModal.isTotalCalcOn ? material.meta.isTotalReadOnly = false : return" 
+                ng-blur="model.productFormModal.isTotalCalcOn ? material.meta.isTotalReadOnly = true : return" 
+                required
+              >
+              <input class="md-products-datalist-input col-lg-1 col-md-1 col-sm-1 col-xs-1" 
+                type="number" 
+                step="any" 
+                ng-model="material.tolerance" 
+                ng-change="material.tolerance = model.productFormModal.func.toFixed(material.tolerance);
+                  applicator.targetTol = model.productFormModal.func.onScaleChanged(applicator, 'tol')" 
+                required
+              >
+              <span class="col-lg-1 col-md-1 col-sm-1 col-xs-1"></span>
+              <span class="col-lg-1 col-md-1 col-sm-1 col-xs-1"></span>
               <input hidden class="md-products-datalist-input col-lg-2 col-md-2 col-sm-2 col-xs-2" type="text" ng-model="material.materialId">
             </div> 
           </div>
 
           <div ng-if="$index === 0" class="row col-lg-12 col-md-12 col-sm-12 col-xs-12" style="padding-left: 0px; padding-right: 0px;"> 
-            <input class="md-products-datalist-input col-lg-5 col-md-5 col-sm-5 col-xs-5" type="text" placeholder="&#61442; Search for Material" list="dataList1" ng-model="material.name" ng-change="material.materialId = material.name.split(' | ')[0]" required>
-            <input class="md-products-datalist-input col-lg-1 col-md-1 col-sm-1 col-xs-1" type="number" ng-model="material.oz" required>
-            <input class="md-products-datalist-input col-lg-2 col-md-2 col-sm-2 col-xs-2" type="number" ng-model="material.gramsOnScale" required>
-            <input class="md-products-datalist-input col-lg-2 col-md-2 col-sm-2 col-xs-2" type="number" ng-model="material.gramsTotal" required>
-            <input class="md-products-datalist-input col-lg-2 col-md-2 col-sm-2 col-xs-2" type="number" ng-model="material.tolerance" required>
+            <input class="md-products-datalist-input col-lg-4 col-md-4 col-sm-4 col-xs-4" style="padding: 0px; text-align-last:center" type="text" placeholder="&#61442; Search for Material" list="dataList1" ng-model="material.name" ng-change="material.materialId = model.productFormModal.func.onMaterialChanged(material.name)" required>
+            <input class="md-products-datalist-input col-lg-1 col-md-1 col-sm-1 col-xs-1" type="number" step="any" ng-model="material.oz" ng-change="material.oz = model.productFormModal.func.toFixed(material.oz)" required>
+            <input class="md-products-datalist-input col-lg-2 col-md-2 col-sm-2 col-xs-2" 
+              type="number" 
+              step="any" 
+              ng-model="material.gramsOnScale" 
+              ng-change="material.gramsOnScale = model.productFormModal.func.toFixed(material.gramsOnScale); 
+                applicator.targetGOS = model.productFormModal.func.onScaleChanged(applicator, 'gos');" 
+              required
+            >
+            <input class="md-products-datalist-input col-lg-2 col-md-2 col-sm-2 col-xs-2" 
+              type="number" 
+              step="any" 
+              ng-model="material.gramsTotal" 
+              ng-readonly="material.meta.isTotalReadOnly && model.productFormModal.isTotalCalcOn" 
+              ng-dblclick="model.productFormModal.isTotalCalcOn ? material.meta.isTotalReadOnly = false : return" 
+              ng-blur="model.productFormModal.isTotalCalcOn ? material.meta.isTotalReadOnly = true : return" 
+              required
+            >
+            <input class="md-products-datalist-input col-lg-1 col-md-1 col-sm-1 col-xs-1" 
+              type="number" 
+              step="any" 
+              ng-model="material.tolerance" 
+              ng-change="material.tolerance = model.productFormModal.func.toFixed(material.tolerance);
+                applicator.targetTol = model.productFormModal.func.onScaleChanged(applicator, 'tol')" 
+              required
+            >
+            <input class="md-products-datalist-input col-lg-1 col-md-1 col-sm-1 col-xs-1" type="number" step="any" ng-model="applicator.targetTol" readonly required>
+            <input class="md-products-datalist-input col-lg-1 col-md-1 col-sm-1 col-xs-1" type="number" step="any" ng-model="applicator.targetGOS" readonly required>
             <input hidden class="md-products-datalist-input col-lg-2 col-md-2 col-sm-2 col-xs-2" type="text" ng-model="material.materialId">
           </div>
 
@@ -146,7 +178,7 @@
           type="textarea"
           class="col-lg-7 col-md-7 col-sm-7 col-xs-7"
           rows="3"
-          style="width: 100%; border: solid .1px lightgray; resize: none"
+          style="width: 100%; border-radius: 5px; border: solid 1px lightgray; resize: none;"
           placeholder="Any comments (e.g. Better run on line 1) - Maximun 250 Characters"
           maxlength="250"
           ng-model="model.productFormModal.comment"

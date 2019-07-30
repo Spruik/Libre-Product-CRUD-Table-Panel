@@ -169,7 +169,7 @@ export const getRestructuredProduct = (rawCols, rows) => {
 }
 
 export const findProductById = (products, key) => {
-  return products.filter(product => product.product_id === key)
+  return products.filter(product => product.id === key)
 }
 
 export const findProductByDesc = (products, key) => {

@@ -171,7 +171,7 @@ System.register(['lodash', 'jquery', 'app/plugins/sdk', './transformers', './edi
               }
             });
 
-            var idIndex = $scope.ctrl.colDimensions.indexOf("product_id");
+            var idIndex = $scope.ctrl.colDimensions.indexOf("id");
             if (!~idIndex) {
               utils.alert('error', 'Error', 'Get not get this product from the database because PRODUCT ID NOT FOUND, please contact the dev team or try to NOT hide the product id column');
               return;
@@ -251,10 +251,21 @@ System.register(['lodash', 'jquery', 'app/plugins/sdk', './transformers', './edi
               }
               this.materials = utils.getRestructuredData(dataList[2].columns, dataList[2].rows);
               this.materialsDataList = this.materials.reduce(function (arr, mat) {
-                var item = mat.id + ' | ' + mat.description;
+                var item = mat.name + ' | ' + mat.description;
                 arr.push(item);
                 return arr;
               }, []);
+            }
+
+            if (dataList[3]) {
+              if (dataList[3].type !== 'table') {
+                utils.alert('error', 'Error', 'To show the product list, please format data as a TABLE in the Metrics Setting');
+                return;
+              }
+              this.operationSeq = utils.getRestructuredData(dataList[3].columns, dataList[3].rows);
+              this.operationSeqList = this.operationSeq.map(function (x) {
+                return x.name;
+              });
             }
 
             this.productGroupsFilter.splice(0, 0, 'All');

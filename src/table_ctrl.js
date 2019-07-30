@@ -81,7 +81,7 @@ export class TableCtrl extends MetricsPanelCtrl {
         }
       })
 
-      const idIndex = $scope.ctrl.colDimensions.indexOf("product_id")
+      const idIndex = $scope.ctrl.colDimensions.indexOf("id")
       if (!~idIndex) {
         utils.alert('error', 'Error', 'Get not get this product from the database because PRODUCT ID NOT FOUND, please contact the dev team or try to NOT hide the product id column')
         return
@@ -156,10 +156,19 @@ export class TableCtrl extends MetricsPanelCtrl {
       }
       this.materials = utils.getRestructuredData(dataList[2].columns, dataList[2].rows)
       this.materialsDataList = this.materials.reduce((arr, mat) => {
-        const item = `${mat.id} | ${mat.description}`
+        const item = `${mat.name} | ${mat.description}`
         arr.push(item)
         return arr
       }, [])
+    }
+
+    if (dataList[3]) {
+      if (dataList[3].type !== 'table') {
+        utils.alert('error', 'Error', 'To show the product list, please format data as a TABLE in the Metrics Setting')
+        return
+      }
+      this.operationSeq = utils.getRestructuredData(dataList[3].columns, dataList[3].rows)
+      this.operationSeqList = this.operationSeq.map(x => x.name)
     }
 
     this.productGroupsFilter.splice(0, 0, 'All')
