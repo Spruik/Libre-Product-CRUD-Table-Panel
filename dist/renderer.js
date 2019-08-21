@@ -1,9 +1,9 @@
 'use strict';
 
-System.register(['lodash', 'moment', 'app/core/utils/kbn'], function (_export, _context) {
+System.register(['lodash', 'moment', 'app/core/utils/kbn', '@grafana/data'], function (_export, _context) {
   "use strict";
 
-  var _, moment, kbn, _createClass, TableRenderer;
+  var _, moment, kbn, stringToJsRegex, _createClass, TableRenderer;
 
   function _classCallCheck(instance, Constructor) {
     if (!(instance instanceof Constructor)) {
@@ -18,6 +18,8 @@ System.register(['lodash', 'moment', 'app/core/utils/kbn'], function (_export, _
       moment = _moment.default;
     }, function (_appCoreUtilsKbn) {
       kbn = _appCoreUtilsKbn.default;
+    }, function (_grafanaData) {
+      stringToJsRegex = _grafanaData.stringToJsRegex;
     }],
     execute: function () {
       _createClass = function () {
@@ -68,7 +70,7 @@ System.register(['lodash', 'moment', 'app/core/utils/kbn'], function (_export, _
               for (var i = 0; i < this.panel.styles.length; i++) {
                 var style = this.panel.styles[i];
 
-                var regex = kbn.stringToJsRegex(style.pattern);
+                var regex = stringToJsRegex(style.pattern);
                 if (column.text.match(regex)) {
                   column.style = style;
 
