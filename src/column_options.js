@@ -1,59 +1,58 @@
-import _ from 'lodash';
-import kbn from 'app/core/utils/kbn';
+import _ from 'lodash'
+import kbn from 'app/core/utils/kbn'
 
 export class ColumnOptionsCtrl {
-
   /** @ngInject */
-  constructor($scope) {
-    $scope.editor = this;
+  constructor ($scope) {
+    $scope.editor = this
 
-    this.activeStyleIndex = 0;
-    this.panelCtrl = $scope.ctrl;
-    this.panel = this.panelCtrl.panel;
-    this.unitFormats = kbn.getUnitFormats();
+    this.activeStyleIndex = 0
+    this.panelCtrl = $scope.ctrl
+    this.panel = this.panelCtrl.panel
+    this.unitFormats = kbn.getUnitFormats()
     this.colorModes = [
       { text: 'Disabled', value: null },
       { text: 'Cell', value: 'cell' },
       { text: 'Value', value: 'value' },
-      { text: 'Row', value: 'row' },
-    ];
+      { text: 'Row', value: 'row' }
+    ]
     this.columnTypes = [
       { text: 'Number', value: 'number' },
       { text: 'String', value: 'string' },
       { text: 'Date', value: 'date' },
-      { text: 'Hidden', value: 'hidden' },
-    ];
-    this.fontSizes = ['80%', '90%', '100%', '110%', '120%', '130%', '150%', '160%', '180%', '200%', '220%', '250%'];
+      { text: 'Hidden', value: 'hidden' }
+    ]
+    this.fontSizes = ['80%', '90%', '100%', '110%', '120%', '130%', '150%', '160%', '180%', '200%', '220%', '250%']
     this.dateFormats = [
       // { text: 'YYYY-MM-DD HH:mm:ss', value: 'YYYY-MM-DD HH:mm:ss' },
-      { text: 'YYYY-MM-DD HH:mm:ss.SSS', value: 'YYYY-MM-DD HH:mm:ss.SSS' },
+      { text: 'YYYY-MM-DD HH:mm:ss.SSS', value: 'YYYY-MM-DD HH:mm:ss.SSS' }
       // { text: 'MM/DD/YY h:mm:ss a', value: 'MM/DD/YY h:mm:ss a' },
       // { text: 'MMMM D, YYYY LT', value: 'MMMM D, YYYY LT' },
-    ];
-    this.mappingTypes = [{ text: 'Value to text', value: 1 }, { text: 'Range to text', value: 2 }];
+    ]
+    this.mappingTypes = [{ text: 'Value to text', value: 1 }, { text: 'Range to text', value: 2 }]
 
     this.getColumnNames = () => {
       if (!this.panelCtrl.table) {
-        return [];
+        return []
       }
       return _.map(this.panelCtrl.table.columns, (col) => {
-        return col.text;
-      });
-    };
+        return col.text
+      })
+    }
 
-    this.onColorChange = this.onColorChange.bind(this);
+    this.onColorChange = this.onColorChange.bind(this)
   }
 
-  render() {
-    this.panelCtrl.render();
+  render () {
+    this.panelCtrl.render()
   }
 
-  setUnitFormat(column, subItem) {
-    column.unit = subItem.value;
-    this.panelCtrl.render();
+  setUnitFormat (column, subItem) {
+    column.unit = subItem.value
+    this.panelCtrl.render()
   }
 
-  addColumnStyle() {
+  addColumnStyle () {
     const newStyleRule = {
       unit: 'short',
       type: 'number',
@@ -64,78 +63,78 @@ export class ColumnOptionsCtrl {
       pattern: '',
       dateFormat: 'YYYY-MM-DD HH:mm:ss',
       thresholds: [],
-      mappingType: 1,
-    };
+      mappingType: 1
+    }
 
-    const styles = this.panel.styles;
-    const stylesCount = styles.length;
-    let indexToInsert = stylesCount;
+    const styles = this.panel.styles
+    const stylesCount = styles.length
+    let indexToInsert = stylesCount
 
     // check if last is a catch all rule, then add it before that one
     if (stylesCount > 0) {
-      const last = styles[stylesCount - 1];
+      const last = styles[stylesCount - 1]
       if (last.pattern === '/.*/') {
-        indexToInsert = stylesCount - 1;
+        indexToInsert = stylesCount - 1
       }
     }
 
-    styles.splice(indexToInsert, 0, newStyleRule);
-    this.activeStyleIndex = indexToInsert;
+    styles.splice(indexToInsert, 0, newStyleRule)
+    this.activeStyleIndex = indexToInsert
   }
 
-  removeColumnStyle(style) {
-    this.panel.styles = _.without(this.panel.styles, style);
+  removeColumnStyle (style) {
+    this.panel.styles = _.without(this.panel.styles, style)
   }
 
-  invertColorOrder(index) {
-    const ref = this.panel.styles[index].colors;
-    const copy = ref[0];
-    ref[0] = ref[2];
-    ref[2] = copy;
-    this.panelCtrl.render();
+  invertColorOrder (index) {
+    const ref = this.panel.styles[index].colors
+    const copy = ref[0]
+    ref[0] = ref[2]
+    ref[2] = copy
+    this.panelCtrl.render()
   }
 
-  onColorChange(styleIndex, colorIndex) {
+  onColorChange (styleIndex, colorIndex) {
     return newColor => {
-      this.panel.styles[styleIndex].colors[colorIndex] = newColor;
-      this.render();
-    };
+      this.panel.styles[styleIndex].colors[colorIndex] = newColor
+      this.render()
+    }
   }
 
-  addValueMap(style) {
+  addValueMap (style) {
     if (!style.valueMaps) {
-      style.valueMaps = [];
+      style.valueMaps = []
     }
-    style.valueMaps.push({ value: '', text: '' });
-    this.panelCtrl.render();
+    style.valueMaps.push({ value: '', text: '' })
+    this.panelCtrl.render()
   }
 
-  removeValueMap(style, index) {
-    style.valueMaps.splice(index, 1);
-    this.panelCtrl.render();
+  removeValueMap (style, index) {
+    style.valueMaps.splice(index, 1)
+    this.panelCtrl.render()
   }
 
-  addRangeMap(style) {
+  addRangeMap (style) {
     if (!style.rangeMaps) {
-      style.rangeMaps = [];
+      style.rangeMaps = []
     }
-    style.rangeMaps.push({ from: '', to: '', text: '' });
-    this.panelCtrl.render();
+    style.rangeMaps.push({ from: '', to: '', text: '' })
+    this.panelCtrl.render()
   }
 
-  removeRangeMap(style, index) {
-    style.rangeMaps.splice(index, 1);
-    this.panelCtrl.render();
+  removeRangeMap (style, index) {
+    style.rangeMaps.splice(index, 1)
+    this.panelCtrl.render()
   }
 }
 
 /** @ngInject */
-export function columnOptionsTab($q, uiSegmentSrv) {
-  'use strict';
+export function columnOptionsTab ($q, uiSegmentSrv) {
+  'use strict'
   return {
     restrict: 'E',
     scope: true,
-    templateUrl: 'public/plugins/smart-factory-products-crud-table-panel/partials/column_options.html',
-    controller: ColumnOptionsCtrl,
-  };
+    templateUrl: 'public/plugins/libre-product-crud-table-panel/partials/column_options.html',
+    controller: ColumnOptionsCtrl
+  }
 }
