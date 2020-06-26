@@ -12,7 +12,6 @@ System.register(['./utils', './product_form'], function (_export, _context) {
     }],
     execute: function () {
       preprocess = function preprocess(scope) {
-
         scope.productOptionsModal = {};
 
         scope.productOptionsModal.onViewClick = function () {

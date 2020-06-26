@@ -12,7 +12,6 @@ System.register(['./utils', './product_group_form'], function (_export, _context
     }],
     execute: function () {
       preprocess = function preprocess(scope) {
-
         scope.productGroupOptionsModal = {};
 
         scope.productGroupOptionsModal.onUpdateClick = function () {

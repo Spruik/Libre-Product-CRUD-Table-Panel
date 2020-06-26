@@ -86,10 +86,10 @@ System.register(['./utils'], function (_export, _context) {
               return x.id;
             });
             if (ids.length === 0) {
-              //if cannot get anything
+              // if cannot get anything
               success();
             } else {
-              //if can get something
+              // if can get something
               // use the product group to remove the product
               utils.remove(productsByGroupNameUrl).then(function () {
                 // use the product id to remove the material requirements
@@ -147,7 +147,7 @@ System.register(['./utils'], function (_export, _context) {
             fail(e);
           });
         } else {
-          // ingredient changed, update the product table 
+          // ingredient changed, update the product table
           // remove all material requirements that match the product id
           // re-insert the new material requirements
           var materialsToSend = getMaterialsToSendList(product);

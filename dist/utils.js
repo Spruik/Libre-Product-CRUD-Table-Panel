@@ -24,8 +24,8 @@ System.register(['app/core/core'], function (_export, _context) {
           var xhr = new XMLHttpRequest();
           xhr.open('POST', url);
           xhr.onreadystatechange = handleResponse;
-          xhr.setRequestHeader("Accept", "application/json");
-          xhr.setRequestHeader("Content-Type", "application/json");
+          xhr.setRequestHeader('Accept', 'application/json');
+          xhr.setRequestHeader('Content-Type', 'application/json');
           xhr.onerror = function (e) {
             return reject(e);
           };
@@ -109,8 +109,8 @@ System.register(['app/core/core'], function (_export, _context) {
           var xhr = new XMLHttpRequest();
           xhr.open('PATCH', url);
           xhr.onreadystatechange = handleResponse;
-          xhr.setRequestHeader("Accept", "application/json");
-          xhr.setRequestHeader("Content-Type", "application/json");
+          xhr.setRequestHeader('Accept', 'application/json');
+          xhr.setRequestHeader('Content-Type', 'application/json');
           xhr.onerror = function (e) {
             return reject(e);
           };
@@ -144,7 +144,7 @@ System.register(['app/core/core'], function (_export, _context) {
 
       _export('showModal', showModal = function showModal(html, data) {
         appEvents.emit('show-modal', {
-          src: 'public/plugins/smart-factory-products-crud-table-panel/partials/' + html,
+          src: 'public/plugins/libre-product-crud-table-panel/partials/' + html,
           modalClass: 'confirm-modal',
           model: data
         });
@@ -154,7 +154,7 @@ System.register(['app/core/core'], function (_export, _context) {
 
       _export('showLargeModal', showLargeModal = function showLargeModal(html, data) {
         appEvents.emit('show-modal', {
-          src: 'public/plugins/smart-factory-products-crud-table-panel/partials/' + html,
+          src: 'public/plugins/libre-product-crud-table-panel/partials/' + html,
           modalClass: 'extra-large',
           model: data
         });

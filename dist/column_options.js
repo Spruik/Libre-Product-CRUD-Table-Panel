@@ -18,7 +18,7 @@ System.register(['lodash', 'app/core/utils/kbn'], function (_export, _context) {
     return {
       restrict: 'E',
       scope: true,
-      templateUrl: 'public/plugins/smart-factory-products-crud-table-panel/partials/column_options.html',
+      templateUrl: 'public/plugins/libre-product-crud-table-panel/partials/column_options.html',
       controller: ColumnOptionsCtrl
     };
   }
@@ -51,7 +51,6 @@ System.register(['lodash', 'app/core/utils/kbn'], function (_export, _context) {
       }();
 
       _export('ColumnOptionsCtrl', ColumnOptionsCtrl = function () {
-
         /** @ngInject */
         function ColumnOptionsCtrl($scope) {
           var _this = this;
@@ -69,7 +68,10 @@ System.register(['lodash', 'app/core/utils/kbn'], function (_export, _context) {
           this.fontSizes = ['80%', '90%', '100%', '110%', '120%', '130%', '150%', '160%', '180%', '200%', '220%', '250%'];
           this.dateFormats = [
           // { text: 'YYYY-MM-DD HH:mm:ss', value: 'YYYY-MM-DD HH:mm:ss' },
-          { text: 'YYYY-MM-DD HH:mm:ss.SSS', value: 'YYYY-MM-DD HH:mm:ss.SSS' }];
+          { text: 'YYYY-MM-DD HH:mm:ss.SSS', value: 'YYYY-MM-DD HH:mm:ss.SSS'
+            // { text: 'MM/DD/YY h:mm:ss a', value: 'MM/DD/YY h:mm:ss a' },
+            // { text: 'MMMM D, YYYY LT', value: 'MMMM D, YYYY LT' },
+          }];
           this.mappingTypes = [{ text: 'Value to text', value: 1 }, { text: 'Range to text', value: 2 }];
 
           this.getColumnNames = function () {

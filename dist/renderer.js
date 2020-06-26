@@ -311,7 +311,7 @@ System.register(['lodash', 'moment', 'app/core/utils/kbn', '@grafana/data'], fun
             if (column.style && column.style.link) {
               // Render cell as link
               var scopedVars = this.renderRowVariables(rowIndex);
-              scopedVars['__cell'] = { value: value };
+              scopedVars.__cell = { value: value };
 
               var cellLink = this.templateSrv.replace(column.style.linkUrl, scopedVars, encodeURIComponent);
               var cellLinkTooltip = this.templateSrv.replace(column.style.linkTooltip, scopedVars);
