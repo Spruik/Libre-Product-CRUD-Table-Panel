@@ -3,7 +3,7 @@
 System.register(['lodash', './utils', './apis'], function (_export, _context) {
   "use strict";
 
-  var _, utils, apis, _onAddApplicator, _onAddSubMaterial, isMaterialValid, matchOperation, updateGramsTotalAccumulatively, getSumByKey, updateTargetNum, matchMaterial, addPreprocess, viewPreprocess, updatePreprocess, showAddProductFormModal, showViewProductFormModal, showUpdateProductFormModal, removeProduct;
+  var _, utils, apis, _onAddApplicator, _onAddSubMaterial, isMaterialValid, matchOperation, updateGramsTotalAccumulatively, reducerGramsOnScale, reducerTolerance, getSumByKey, updateTargetNum, matchMaterial, addPreprocess, viewPreprocess, updatePreprocess, showAddProductFormModal, showViewProductFormModal, showUpdateProductFormModal, removeProduct;
 
   return {
     setters: [function (_lodash) {
@@ -29,7 +29,7 @@ System.register(['lodash', './utils', './apis'], function (_export, _context) {
           targetTol: 0,
           materials: [{
             seriseId: 1,
-            materialId: "",
+            materialId: '',
             oz: null,
             gramsOnScale: null,
             gramsTotal: null,
@@ -50,7 +50,7 @@ System.register(['lodash', './utils', './apis'], function (_export, _context) {
         }
         var material = {
           seriseId: length + 1,
-          materialId: "",
+          materialId: '',
           oz: null,
           gramsOnScale: null,
           gramsTotal: null,
@@ -108,36 +108,37 @@ System.register(['lodash', './utils', './apis'], function (_export, _context) {
           var item = apps[i];
           for (var k = 0; k < item.materials.length; k++) {
             var mat = item.materials[k];
-            mat.gramsTotal = Number((mat.gramsOnScale + Number(arr.reduce(function (num, x) {
-              return num += x;
-            }, 0).toFixed(2))).toFixed(2));
+            var reducer = function reducer(num, x) {
+              return num + x;
+            };
+            mat.gramsTotal = Number((mat.gramsOnScale + Number(arr.reduce(reducer, 0).toFixed(2))).toFixed(2));
             arr.push(mat.gramsOnScale);
           }
         }
       };
 
+      reducerGramsOnScale = function reducerGramsOnScale(num, x) {
+        return num + x.gramsOnScale || 0;
+      };
+
+      reducerTolerance = function reducerTolerance(num, x) {
+        return num + x.tolerance || 0;
+      };
+
       getSumByKey = function getSumByKey(app, key, form) {
         if (key === 'gos') {
           updateGramsTotalAccumulatively(form);
-          return Number(app.materials.reduce(function (num, x) {
-            return num += x.gramsOnScale || 0;
-          }, 0).toFixed(2));
+          return Number(app.materials.reduce(reducerGramsOnScale, 0).toFixed(2));
         } else if (key === 'tol') {
-          return Number(app.materials.reduce(function (num, x) {
-            return num += x.tolerance || 0;
-          }, 0).toFixed(2));
+          return Number(app.materials.reduce(reducerTolerance, 0).toFixed(2));
         } else {
           return 0;
         }
       };
 
       updateTargetNum = function updateTargetNum(app) {
-        app.targetGOS = Number(app.materials.reduce(function (num, x) {
-          return num += x.gramsOnScale || 0;
-        }, 0).toFixed(2));
-        app.targetTol = Number(app.materials.reduce(function (num, x) {
-          return num += x.tolerance || 0;
-        }, 0).toFixed(2));
+        app.targetGOS = Number(app.materials.reduce(reducerGramsOnScale, 0).toFixed(2));
+        app.targetTol = Number(app.materials.reduce(reducerTolerance, 0).toFixed(2));
       };
 
       matchMaterial = function matchMaterial(scope, val) {
@@ -151,16 +152,16 @@ System.register(['lodash', './utils', './apis'], function (_export, _context) {
       };
 
       addPreprocess = function addPreprocess(scope) {
-        //init data
+        // init data
 
-        var group = scope.currentFilterGroup === 'All' ? scope.productGroups[0] || "" : scope.currentFilterGroup;
+        var group = scope.currentFilterGroup === 'All' ? scope.productGroups[0] || '' : scope.currentFilterGroup;
 
         scope.productFormModal = {
           isTotalCalcOn: true,
           productGroup: group,
           id: null,
-          productDesc: "",
-          comment: "",
+          productDesc: '',
+          comment: '',
           ingredient: {
             applicators: [{
               id: 1,
@@ -171,7 +172,7 @@ System.register(['lodash', './utils', './apis'], function (_export, _context) {
               targetTol: 0,
               materials: [{
                 seriseId: 1,
-                materialId: "",
+                materialId: '',
                 oz: null,
                 gramsOnScale: null,
                 gramsTotal: null,
@@ -233,7 +234,7 @@ System.register(['lodash', './utils', './apis'], function (_export, _context) {
           });
           var setArr = Array.from(new Set(selectedOperations));
           if (selectedOperations.length !== setArr.length) {
-            utils.alert('warning', 'Warning', 'The same operation CANNOT be selected TWICE!');
+            utils.alert('warning', 'Warning', '`The same operation CANNOT be selected TWICE!');
             return;
           }
 
@@ -265,13 +266,12 @@ System.register(['lodash', './utils', './apis'], function (_export, _context) {
           productGroup: cur.product_group,
           productId: cur.id,
           productDesc: cur.product_desc,
-          comment: cur.comment || "",
+          comment: cur.comment || '',
           ingredient: cur.ingredient
         };
       };
 
       updatePreprocess = function updatePreprocess(scope) {
-
         var cur = utils.copy(scope.currentProduct);
 
         scope.productFormModal = {
@@ -279,7 +279,7 @@ System.register(['lodash', './utils', './apis'], function (_export, _context) {
           productGroup: cur.product_group,
           id: cur.id,
           productDesc: cur.product_desc,
-          comment: cur.comment || "",
+          comment: cur.comment || '',
           ingredient: cur.ingredient,
           func: {
             onAddApplicator: function onAddApplicator() {
@@ -322,11 +322,10 @@ System.register(['lodash', './utils', './apis'], function (_export, _context) {
         scope.tempProductForm = utils.copy(scope.productFormModal);
 
         scope.productFormModal.func.onSubmit = function () {
-
           var product = scope.productFormModal;
           var match = utils.findProductById(scope.products, product.id);
 
-          //Check if make any changes
+          // Check if make any changes
           if (!utils.hasObjectChanged(scope.tempProductForm, product)) {
             utils.alert('warning', 'Warning', 'You Did Not Make Any Changes On It');
             return;
@@ -342,7 +341,7 @@ System.register(['lodash', './utils', './apis'], function (_export, _context) {
             return;
           }
 
-          //Check if id is invalid
+          // Check if id is invalid
           if (match.length !== 0) {
             if (match[0].id !== cur.id) {
               utils.alert('warning', 'Warning', 'Product With Product ID "' + product.id + '" Already Exists');

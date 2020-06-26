@@ -12,9 +12,8 @@ System.register(['./utils', './apis'], function (_export, _context) {
     }],
     execute: function () {
       addPreprocess = function addPreprocess(scope) {
-
         scope.productGroupFormModal = {
-          groupName: "",
+          groupName: '',
           action: 'add'
         };
 
@@ -26,22 +25,21 @@ System.register(['./utils', './apis'], function (_export, _context) {
       };
 
       updatePreprocess = function updatePreprocess(scope) {
-
         scope.productGroupFormModal = {
-          groupName: "",
+          groupName: '',
           action: 'update',
-          toBeUpdated: scope.productGroups[0] || ""
+          toBeUpdated: scope.productGroups[0] || ''
         };
 
         scope.productGroupFormModal.onUpdate = function () {
           var toBeUpdated = scope.productGroupFormModal.toBeUpdated;
           var groupName = scope.productGroupFormModal.groupName;
-          if (groupName === "") {
+          if (groupName === '') {
             utils.alert('warning', 'Warning', 'The new group name cannot be empty');
           } else if (toBeUpdated === groupName) {
             utils.alert('warning', 'Warning', 'The new group name is the same with the original one');
           } else {
-            //Validation OK!
+            // Validation OK!
             scope.confirmModal = {
               confirmMsg: "Please note that after changing the name of this brand product line, all its children's brand product line name will also be changed",
               onConfirm: function onConfirm() {
@@ -56,16 +54,15 @@ System.register(['./utils', './apis'], function (_export, _context) {
       };
 
       removePreprocess = function removePreprocess(scope) {
-
         scope.productGroupFormModal = {
           action: 'remove',
-          toBeRemoved: scope.productGroups[0] || ""
+          toBeRemoved: scope.productGroups[0] || ''
         };
 
         scope.productGroupFormModal.onRemove = function () {
           var toBeRemoved = scope.productGroupFormModal.toBeRemoved;
           scope.confirmModal = {
-            confirmMsg: "Please note that after removing this brand product line, all its children will also be removed",
+            confirmMsg: 'Please note that after removing this brand product line, all its children will also be removed',
             onConfirm: function onConfirm() {
               apis.removeProductGroup(toBeRemoved, utils.successCallBack('pct-confirm-modal-cancelBtn', 'Brand Produt Line Has Been Removed Successfully', scope), function (e) {
                 return utils.failCallBack('pct-confirm-modal-cancelBtn', 'An Error Occurr While Removing The Brand Product Line Due To ' + e);

@@ -2,10 +2,9 @@ import _ from 'lodash'
 import * as utils from './utils'
 import * as apis from './apis'
 
-
 const _onAddApplicator = scope => {
   const length = scope.productFormModal.ingredient.applicators.length
-  const maxApplicatorNum =10
+  const maxApplicatorNum = 10
   if (length >= maxApplicatorNum) { return }
   const applicator = {
     id: length + 1,
@@ -17,7 +16,7 @@ const _onAddApplicator = scope => {
     materials: [
       {
         seriseId: 1,
-        materialId: "",
+        materialId: '',
         oz: null,
         gramsOnScale: null,
         gramsTotal: null,
@@ -37,7 +36,7 @@ const _onAddSubMaterial = (scope, topId) => {
   if (length >= maxMaterialNum) { return }
   const material = {
     seriseId: length + 1,
-    materialId: "",
+    materialId: '',
     oz: null,
     gramsOnScale: null,
     gramsTotal: null,
@@ -51,13 +50,13 @@ const _onAddSubMaterial = (scope, topId) => {
 }
 
 const isMaterialValid = (ingredient, materialsModelList) => {
-  let materials = []
+  const materials = []
   ingredient.applicators.forEach(app => {
     app.materials.forEach(m => {
       materials.push(m.name)
     })
   })
-  
+
   const diffItems = _.difference(materials, materialsModelList)
   if (diffItems.length !== 0) {
     utils.alert('warning', 'Material Not Exists', `The material ${diffItems[0]} does not exist, please either add it to the material list or select the exact item that the input field suggests`)
@@ -70,9 +69,9 @@ const isMaterialValid = (ingredient, materialsModelList) => {
 const matchOperation = (scope, val, toGet) => {
   if (toGet === 'id') {
     return scope.operationSeq.filter(x => x.name === val)[0].id
-  }else if (toGet === 'seq') {
+  } else if (toGet === 'seq') {
     return scope.operationSeq.filter(x => x.name === val)[0].sequence
-  }else {
+  } else {
     return 0
   }
 }
@@ -82,35 +81,38 @@ const updateGramsTotalAccumulatively = (form) => {
   const apps = form.ingredient.applicators
   if (!apps) { return }
 
-  let arr = []
+  const arr = []
   for (let i = 0; i < apps.length; i++) {
-    const item = apps[i];
+    const item = apps[i]
     for (let k = 0; k < item.materials.length; k++) {
-      const mat = item.materials[k];
-      mat.gramsTotal = Number((mat.gramsOnScale + Number(arr.reduce((num, x) => num += x, 0).toFixed(2))).toFixed(2))
+      const mat = item.materials[k]
+      const reducer = (num, x) => { return num + x }
+      mat.gramsTotal = Number((mat.gramsOnScale + Number(arr.reduce(reducer, 0).toFixed(2))).toFixed(2))
       arr.push(mat.gramsOnScale)
     }
   }
-
 }
 
+const reducerGramsOnScale = (num, x) => { return num + x.gramsOnScale || 0 }
+const reducerTolerance = (num, x) => { return num + x.tolerance || 0 }
+
 const getSumByKey = (app, key, form) => {
-  if (key === 'gos'){
+  if (key === 'gos') {
     updateGramsTotalAccumulatively(form)
-    return Number(app.materials.reduce((num, x) => num += x.gramsOnScale || 0, 0).toFixed(2))
-  }else if (key === 'tol'){
-    return Number(app.materials.reduce((num, x) => num += x.tolerance || 0, 0).toFixed(2))
-  }else {
+    return Number(app.materials.reduce(reducerGramsOnScale, 0).toFixed(2))
+  } else if (key === 'tol') {
+    return Number(app.materials.reduce(reducerTolerance, 0).toFixed(2))
+  } else {
     return 0
   }
 }
 
 const updateTargetNum = app => {
-  app.targetGOS = Number(app.materials.reduce((num, x) => num += x.gramsOnScale || 0, 0).toFixed(2))
-  app.targetTol = Number(app.materials.reduce((num, x) => num += x.tolerance || 0, 0).toFixed(2))
+  app.targetGOS = Number(app.materials.reduce(reducerGramsOnScale, 0).toFixed(2))
+  app.targetTol = Number(app.materials.reduce(reducerTolerance, 0).toFixed(2))
 }
 
-const  matchMaterial = (scope, val) => {
+const matchMaterial = (scope, val) => {
   if (val === undefined || val === null) return 0
   const name = val.split(' | ')[0]
   const desc = val.split(' | ')[1]
@@ -119,16 +121,16 @@ const  matchMaterial = (scope, val) => {
 }
 
 const addPreprocess = scope => {
-  //init data
+  // init data
 
-  const group = scope.currentFilterGroup === 'All' ? scope.productGroups[0] || "" : scope.currentFilterGroup
+  const group = scope.currentFilterGroup === 'All' ? scope.productGroups[0] || '' : scope.currentFilterGroup
 
   scope.productFormModal = {
     isTotalCalcOn: true,
     productGroup: group,
     id: null,
-    productDesc: "",
-    comment: "",
+    productDesc: '',
+    comment: '',
     ingredient: {
       applicators: [
         {
@@ -141,7 +143,7 @@ const addPreprocess = scope => {
           materials: [
             {
               seriseId: 1,
-              materialId: "",
+              materialId: '',
               oz: null,
               gramsOnScale: null,
               gramsTotal: null,
@@ -158,9 +160,9 @@ const addPreprocess = scope => {
       onAddApplicator: () => {
         _onAddApplicator(scope)
       },
-      onRemoveApplicator: () => { 
+      onRemoveApplicator: () => {
         const apps = scope.productFormModal.ingredient.applicators
-        apps.pop() 
+        apps.pop()
         updateGramsTotalAccumulatively(scope.productFormModal)
       },
       onAddSubMaterial: (topId) => {
@@ -168,9 +170,9 @@ const addPreprocess = scope => {
       },
       onRemoveSubMaterial: (id) => {
         const apps = scope.productFormModal.ingredient.applicators
-        apps[id-1].materials.pop() 
+        apps[id - 1].materials.pop()
         updateGramsTotalAccumulatively(scope.productFormModal)
-        updateTargetNum(apps[id-1])
+        updateTargetNum(apps[id - 1])
       },
       onOperationChanged: (val, toGet) => {
         return matchOperation(scope, val, toGet)
@@ -196,14 +198,14 @@ const addPreprocess = scope => {
     const product = scope.productFormModal
 
     if (!product.ingredient.applicators) {
-      utils.alert('warning', 'Warning', `No material can be found on this product`)
+      utils.alert('warning', 'Warning', 'No material can be found on this product')
       return
     }
 
     const selectedOperations = scope.productFormModal.ingredient.applicators.map(x => x.operation)
     const setArr = Array.from(new Set(selectedOperations))
     if (selectedOperations.length !== setArr.length) {
-      utils.alert('warning', 'Warning', `The same operation CANNOT be selected TWICE!`)
+      utils.alert('warning', 'Warning', '`The same operation CANNOT be selected TWICE!')
       return
     }
 
@@ -231,7 +233,7 @@ const addPreprocess = scope => {
 
 /**
  * Data init for viewing product
- * @param {*} scope 
+ * @param {*} scope
  */
 const viewPreprocess = scope => {
   const cur = scope.currentProduct
@@ -239,33 +241,32 @@ const viewPreprocess = scope => {
     productGroup: cur.product_group,
     productId: cur.id,
     productDesc: cur.product_desc,
-    comment: cur.comment || "",
-    ingredient: cur.ingredient,
+    comment: cur.comment || '',
+    ingredient: cur.ingredient
   }
 }
 
 /**
  * Data init for updating product
- * @param {*} scope 
+ * @param {*} scope
  */
 const updatePreprocess = scope => {
-
-  const cur = utils.copy(scope.currentProduct) 
+  const cur = utils.copy(scope.currentProduct)
 
   scope.productFormModal = {
     isTotalCalcOn: true,
     productGroup: cur.product_group,
     id: cur.id,
     productDesc: cur.product_desc,
-    comment: cur.comment || "",
+    comment: cur.comment || '',
     ingredient: cur.ingredient,
     func: {
       onAddApplicator: () => {
         _onAddApplicator(scope)
       },
-      onRemoveApplicator: () => { 
+      onRemoveApplicator: () => {
         const apps = scope.productFormModal.ingredient.applicators
-        apps.pop() 
+        apps.pop()
         updateGramsTotalAccumulatively(scope.productFormModal)
       },
       onAddSubMaterial: (topId) => {
@@ -273,9 +274,9 @@ const updatePreprocess = scope => {
       },
       onRemoveSubMaterial: (id) => {
         const apps = scope.productFormModal.ingredient.applicators
-        apps[id-1].materials.pop() 
+        apps[id - 1].materials.pop()
         updateGramsTotalAccumulatively(scope.productFormModal)
-        updateTargetNum(apps[id-1])
+        updateTargetNum(apps[id - 1])
       },
       onOperationChanged: (val, toGet) => {
         return matchOperation(scope, val, toGet)
@@ -300,13 +301,12 @@ const updatePreprocess = scope => {
   scope.tempProductForm = utils.copy(scope.productFormModal)
 
   scope.productFormModal.func.onSubmit = () => {
-
     const product = scope.productFormModal
     const match = utils.findProductById(scope.products, product.id)
 
-    //Check if make any changes
+    // Check if make any changes
     if (!utils.hasObjectChanged(scope.tempProductForm, product)) {
-      utils.alert('warning', 'Warning', `You Did Not Make Any Changes On It`)
+      utils.alert('warning', 'Warning', 'You Did Not Make Any Changes On It')
       return
     }
 
@@ -314,11 +314,11 @@ const updatePreprocess = scope => {
     const selectedOperations = scope.productFormModal.ingredient.applicators.map(x => x.operation)
     const setArr = Array.from(new Set(selectedOperations))
     if (selectedOperations.length !== setArr.length) {
-      utils.alert('warning', 'Warning', `The same operation CANNOT be selected TWICE!`)
+      utils.alert('warning', 'Warning', 'The same operation CANNOT be selected TWICE!')
       return
     }
 
-    //Check if id is invalid
+    // Check if id is invalid
     if (match.length !== 0) {
       if (match[0].id !== cur.id) {
         utils.alert('warning', 'Warning', `Product With Product ID "${product.id}" Already Exists`)
@@ -359,7 +359,7 @@ export const removeProduct = scope => {
     confirmMsg: `Please confirm that you want to remove product ${id}`,
     onConfirm: () => {
       apis.removeProduct(
-        id, 
+        id,
         utils.successCallBack('pct-confirm-modal-cancelBtn', `Product ${id} Has Been Removed Successfully`, scope),
         e => utils.failCallBack('pct-confirm-modal-cancelBtn', `An Error Occurr While Removing The Product Due To ${e}`)
       )

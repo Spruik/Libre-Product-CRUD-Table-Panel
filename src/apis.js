@@ -54,11 +54,11 @@ export const removeProductGroup = (toBeRemoved, success, fail) => {
     const productsByGroupNameUrl = `${utils.postgRestHost}product?product_group=eq.${toBeRemoved}`
     utils.get(productsByGroupNameUrl).then(res => {
       const ids = res.map(x => x.id)
-      if(ids.length === 0){
-        //if cannot get anything
+      if (ids.length === 0) {
+        // if cannot get anything
         success()
-      }else {
-        //if can get something
+      } else {
+        // if can get something
         // use the product group to remove the product
         utils.remove(productsByGroupNameUrl).then(() => {
           // use the product id to remove the material requirements
@@ -66,11 +66,11 @@ export const removeProductGroup = (toBeRemoved, success, fail) => {
           ids.forEach(id => {
             proimise.push(utils.remove(`${utils.postgRestHost}material_requirement?product_id=eq.${id}`))
           })
-          Promise.all(proimise).then(() => {success()}).catch(e => {fail(e)})
-        }).catch(e => {fail(e)})
+          Promise.all(proimise).then(() => { success() }).catch(e => { fail(e) })
+        }).catch(e => { fail(e) })
       }
-    }).catch(e => {fail(e)})
-  }).catch(e => {fail(e)})
+    }).catch(e => { fail(e) })
+  }).catch(e => { fail(e) })
 }
 
 /**
@@ -115,8 +115,8 @@ export const updateProduct = (originalId, originalIngredient, product, success, 
     }).catch(e => {
       fail(e)
     })
-  }else {
-    // ingredient changed, update the product table 
+  } else {
+    // ingredient changed, update the product table
     // remove all material requirements that match the product id
     // re-insert the new material requirements
     const materialsToSend = getMaterialsToSendList(product)
@@ -124,11 +124,11 @@ export const updateProduct = (originalId, originalIngredient, product, success, 
     const matUrl = `${utils.postgRestHost}material_requirement`
     const promise = [
       utils.update(productUrl, JSON.stringify(productToSend)),
-      utils.remove(deleteUrl),
+      utils.remove(deleteUrl)
     ]
 
-    Promise.all(promise).then(()=> {
-      utils.post(matUrl, JSON.stringify(materialsToSend)).then(()=> {
+    Promise.all(promise).then(() => {
+      utils.post(matUrl, JSON.stringify(materialsToSend)).then(() => {
         success()
       }).catch(e => {
         fail(e)
@@ -142,7 +142,7 @@ export const updateProduct = (originalId, originalIngredient, product, success, 
 /**
  * Send request to postgrest for removing a product
  * @param {*} id The id of the product to be removed
- * @param {*} success What to do when the request is successful? give me a func 
+ * @param {*} success What to do when the request is successful? give me a func
  * @param {*} fail What to do when the request is failed? give me a func
  */
 export const removeProduct = (id, success, fail) => {
@@ -165,10 +165,10 @@ function getMaterialsToSendList (product) {
   const materialsToSend = []
   const apps = product.ingredient.applicators
   for (let i = 0; i < apps.length; i++) {
-    const app = apps[i];
+    const app = apps[i]
     const operationId = app.operationId
     for (let k = 0; k < app.materials.length; k++) {
-      const mat = app.materials[k];
+      const mat = app.materials[k]
       materialsToSend.push({
         product_id: product.id,
         material_id: mat.materialId,

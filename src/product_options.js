@@ -2,7 +2,6 @@ import * as utils from './utils'
 import * as product from './product_form'
 
 const preprocess = scope => {
-
   scope.productOptionsModal = {}
 
   scope.productOptionsModal.onViewClick = () => {

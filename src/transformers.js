@@ -1,71 +1,71 @@
-import _ from 'lodash';
-import flatten from 'app/core/utils/flatten';
-import TimeSeries from 'app/core/time_series2';
-import TableModel, { mergeTablesIntoModel } from 'app/core/table_model';
+import _ from 'lodash'
+import flatten from 'app/core/utils/flatten'
+import TimeSeries from 'app/core/time_series2'
+import TableModel from 'app/core/table_model'
 
-const transformers = {};
+const transformers = {}
 
-transformers['timeseries_to_rows'] = {
+transformers.timeseries_to_rows = {
   description: 'Time series to rows',
   getColumns: () => {
-    return [];
+    return []
   },
   transform: (data, panel, model) => {
-    model.columns = [{ text: 'Time', type: 'date' }, { text: 'Metric' }, { text: 'Value' }];
+    model.columns = [{ text: 'Time', type: 'date' }, { text: 'Metric' }, { text: 'Value' }]
 
     for (let i = 0; i < data.length; i++) {
-      const series = data[i];
+      const series = data[i]
       for (let y = 0; y < series.datapoints.length; y++) {
-        const dp = series.datapoints[y];
-        model.rows.push([dp[1], series.target, dp[0]]);
+        const dp = series.datapoints[y]
+        model.rows.push([dp[1], series.target, dp[0]])
       }
     }
-  },
-};
+  }
+}
 
-transformers['timeseries_to_columns'] = {
+transformers.timeseries_to_columns = {
   description: 'Time series to columns',
   getColumns: () => {
-    return [];
+    return []
   },
   transform: (data, panel, model) => {
-    model.columns.push({ text: 'Time', type: 'date' });
+    model.columns.push({ text: 'Time', type: 'date' })
 
     // group by time
-    const points = {};
+    const points = {}
 
     for (let i = 0; i < data.length; i++) {
-      const series = data[i];
-      model.columns.push({ text: series.target });
+      const series = data[i]
+      model.columns.push({ text: series.target })
 
       for (let y = 0; y < series.datapoints.length; y++) {
-        const dp = series.datapoints[y];
-        const timeKey = dp[1].toString();
+        const dp = series.datapoints[y]
+        const timeKey = dp[1].toString()
 
         if (!points[timeKey]) {
-          points[timeKey] = { time: dp[1] };
-          points[timeKey][i] = dp[0];
+          points[timeKey] = { time: dp[1] }
+          points[timeKey][i] = dp[0]
         } else {
-          points[timeKey][i] = dp[0];
+          points[timeKey][i] = dp[0]
         }
       }
     }
 
     for (const time in points) {
-      const point = points[time];
-      const values = [point.time];
+      const point = points[time]
+      const values = [point.time]
 
       for (let i = 0; i < data.length; i++) {
-        const value = point[i];
-        values.push(value);
+        const value = point[i]
+        values.push(value)
       }
 
-      model.rows.push(values);
+      model.rows.push(values)
     }
-  },
-};
+  }
+}
 
-transformers['timeseries_aggregations'] = {
+transformers.timeseries_aggregations = {
   description: 'Time series aggregations',
   getColumns: () => {
     return [
@@ -74,189 +74,191 @@ transformers['timeseries_aggregations'] = {
       { text: 'Max', value: 'max' },
       { text: 'Total', value: 'total' },
       { text: 'Current', value: 'current' },
-      { text: 'Count', value: 'count' },
-    ];
+      { text: 'Count', value: 'count' }
+    ]
   },
   transform: (data, panel, model) => {
-    let i, y;
-    model.columns.push({ text: 'Metric' });
+    let i, y
+    model.columns.push({ text: 'Metric' })
 
     for (i = 0; i < panel.columns.length; i++) {
-      model.columns.push({ text: panel.columns[i].text });
+      model.columns.push({ text: panel.columns[i].text })
     }
 
     for (i = 0; i < data.length; i++) {
       const series = new TimeSeries({
         datapoints: data[i].datapoints,
-        alias: data[i].target,
-      });
+        alias: data[i].target
+      })
 
-      series.getFlotPairs('connected');
-      const cells = [series.alias];
+      series.getFlotPairs('connected')
+      const cells = [series.alias]
 
       for (y = 0; y < panel.columns.length; y++) {
-        cells.push(series.stats[panel.columns[y].value]);
+        cells.push(series.stats[panel.columns[y].value])
       }
 
-      model.rows.push(cells);
+      model.rows.push(cells)
     }
-  },
-};
+  }
+}
 
-transformers['annotations'] = {
+transformers.annotations = {
   description: 'Annotations',
   getColumns: () => {
-    return [];
+    return []
   },
   transform: (data, panel, model) => {
-    model.columns.push({ text: 'Time', type: 'date' });
-    model.columns.push({ text: 'Title' });
-    model.columns.push({ text: 'Text' });
-    model.columns.push({ text: 'Tags' });
+    model.columns.push({ text: 'Time', type: 'date' })
+    model.columns.push({ text: 'Title' })
+    model.columns.push({ text: 'Text' })
+    model.columns.push({ text: 'Tags' })
 
     if (!data || !data.annotations || data.annotations.length === 0) {
-      return;
+      return
     }
 
     for (let i = 0; i < data.annotations.length; i++) {
-      const evt = data.annotations[i];
-      model.rows.push([evt.time, evt.title, evt.text, evt.tags]);
+      const evt = data.annotations[i]
+      model.rows.push([evt.time, evt.title, evt.text, evt.tags])
     }
-  },
-};
+  }
+}
 
-transformers['table'] = {
+transformers.table = {
   description: 'Table',
   getColumns: data => {
     if (!data || data.length === 0) {
-      return [];
+      return []
     }
     // Single query returns data columns as is
     if (data.length === 1) {
-      return [...data[0].columns];
+      return [...data[0].columns]
     }
 
     // Track column indexes: name -> index
-    const columnNames = {};
+    const columnNames = {}
 
     // Union of all columns
     const columns = data.reduce((acc, series) => {
       series.columns.forEach(col => {
-        const { text } = col;
+        const { text } = col
         if (columnNames[text] === undefined) {
-          columnNames[text] = acc.length;
-          acc.push(col);
+          columnNames[text] = acc.length
+          acc.push(col)
         }
-      });
-      return acc;
-    }, []);
+      })
+      return acc
+    }, [])
 
-    return columns;
+    return columns
   },
   transform: (data, panel, model) => {
     if (!data || data.length === 0) {
-      return;
+      return
     }
 
-    const noTableIndex = _.findIndex(data, d => d.type !== 'table');
+    const noTableIndex = _.findIndex(data, d => d.type !== 'table')
     if (noTableIndex > -1) {
-      throw {
+      const err = {
         message: `Result of query #${String.fromCharCode(
           65 + noTableIndex
-        )} is not in table format, try using another transform.`,
-      };
+        )} is not in table format, try using another transform.`
+      }
+      throw err
     }
 
     // mergeTablesIntoModel(model, ...data);
-    
-    model.columns = data[0].columns;
-    model.rows = data[0].rows;
-  },
-};
 
-transformers['json'] = {
+    model.columns = data[0].columns
+    model.rows = data[0].rows
+  }
+}
+
+transformers.json = {
   description: 'JSON Data',
   getColumns: data => {
     if (!data || data.length === 0) {
-      return [];
+      return []
     }
 
-    const names = {};
+    const names = {}
     for (let i = 0; i < data.length; i++) {
-      const series = data[i];
+      const series = data[i]
       if (series.type !== 'docs') {
-        continue;
+        continue
       }
 
       // only look at 100 docs
-      const maxDocs = Math.min(series.datapoints.length, 100);
+      const maxDocs = Math.min(series.datapoints.length, 100)
       for (let y = 0; y < maxDocs; y++) {
-        const doc = series.datapoints[y];
-        const flattened = flatten(doc, null);
+        const doc = series.datapoints[y]
+        const flattened = flatten(doc, null)
         for (const propName in flattened) {
-          names[propName] = true;
+          names[propName] = true
         }
       }
     }
 
     return _.map(names, (value, key) => {
-      return { text: key, value: key };
-    });
+      return { text: key, value: key }
+    })
   },
   transform: (data, panel, model) => {
-    let i, y, z;
+    let i, y, z
 
     for (const column of panel.columns) {
-      const tableCol = { text: column.text };
+      const tableCol = { text: column.text }
 
       // if filterable data then set columns to filterable
       if (data.length > 0 && data[0].filterable) {
-        tableCol.filterable = true;
+        tableCol.filterable = true
       }
 
-      model.columns.push(tableCol);
+      model.columns.push(tableCol)
     }
 
     if (model.columns.length === 0) {
-      model.columns.push({ text: 'JSON' });
+      model.columns.push({ text: 'JSON' })
     }
 
     for (i = 0; i < data.length; i++) {
-      const series = data[i];
+      const series = data[i]
 
       for (y = 0; y < series.datapoints.length; y++) {
-        const dp = series.datapoints[y];
-        const values = [];
+        const dp = series.datapoints[y]
+        const values = []
 
         if (_.isObject(dp) && panel.columns.length > 0) {
-          const flattened = flatten(dp, null);
+          const flattened = flatten(dp, null)
           for (z = 0; z < panel.columns.length; z++) {
-            values.push(flattened[panel.columns[z].value]);
+            values.push(flattened[panel.columns[z].value])
           }
         } else {
-          values.push(JSON.stringify(dp));
+          values.push(JSON.stringify(dp))
         }
 
-        model.rows.push(values);
+        model.rows.push(values)
       }
     }
-  },
-};
-
-function transformDataToTable(data, panel) {
-  const model = new TableModel();
-
-  if (!data || data.length === 0) {
-    return model;
   }
-
-  const transformer = transformers[panel.transform];
-  if (!transformer) {
-    throw { message: 'Transformer ' + panel.transform + ' not found' };
-  }
-
-  transformer.transform(data, panel, model);
-  return model;
 }
 
-export { transformers, transformDataToTable };
+function transformDataToTable (data, panel) {
+  const model = new TableModel()
+
+  if (!data || data.length === 0) {
+    return model
+  }
+
+  const transformer = transformers[panel.transform]
+  if (!transformer) {
+    const err = { message: 'Transformer ' + panel.transform + ' not found' }
+    throw err
+  }
+
+  transformer.transform(data, panel, model)
+  return model
+}
+
+export { transformers, transformDataToTable }

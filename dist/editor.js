@@ -18,7 +18,7 @@ System.register(['lodash', './transformers'], function (_export, _context) {
     return {
       restrict: 'E',
       scope: true,
-      templateUrl: 'public/plugins/smart-factory-products-crud-table-panel/partials/editor.html',
+      templateUrl: 'public/plugins/libre-product-crud-table-panel/partials/editor.html',
       controller: TablePanelEditorCtrl
     };
   }
@@ -51,7 +51,6 @@ System.register(['lodash', './transformers'], function (_export, _context) {
       }();
 
       _export('TablePanelEditorCtrl', TablePanelEditorCtrl = function () {
-
         /** @ngInject */
         function TablePanelEditorCtrl($scope, $q, uiSegmentSrv) {
           _classCallCheck(this, TablePanelEditorCtrl);

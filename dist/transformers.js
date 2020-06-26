@@ -3,7 +3,7 @@
 System.register(['lodash', 'app/core/utils/flatten', 'app/core/time_series2', 'app/core/table_model'], function (_export, _context) {
   "use strict";
 
-  var _, flatten, TimeSeries, TableModel, mergeTablesIntoModel, transformers;
+  var _, flatten, TimeSeries, TableModel, transformers;
 
   function _toConsumableArray(arr) {
     if (Array.isArray(arr)) {
@@ -26,7 +26,8 @@ System.register(['lodash', 'app/core/utils/flatten', 'app/core/time_series2', 'a
 
     var transformer = transformers[panel.transform];
     if (!transformer) {
-      throw { message: 'Transformer ' + panel.transform + ' not found' };
+      var err = { message: 'Transformer ' + panel.transform + ' not found' };
+      throw err;
     }
 
     transformer.transform(data, panel, model);
@@ -42,12 +43,11 @@ System.register(['lodash', 'app/core/utils/flatten', 'app/core/time_series2', 'a
       TimeSeries = _appCoreTime_series.default;
     }, function (_appCoreTable_model) {
       TableModel = _appCoreTable_model.default;
-      mergeTablesIntoModel = _appCoreTable_model.mergeTablesIntoModel;
     }],
     execute: function () {
       _export('transformers', transformers = {});
 
-      transformers['timeseries_to_rows'] = {
+      transformers.timeseries_to_rows = {
         description: 'Time series to rows',
         getColumns: function getColumns() {
           return [];
@@ -65,7 +65,7 @@ System.register(['lodash', 'app/core/utils/flatten', 'app/core/time_series2', 'a
         }
       };
 
-      transformers['timeseries_to_columns'] = {
+      transformers.timeseries_to_columns = {
         description: 'Time series to columns',
         getColumns: function getColumns() {
           return [];
@@ -107,7 +107,7 @@ System.register(['lodash', 'app/core/utils/flatten', 'app/core/time_series2', 'a
         }
       };
 
-      transformers['timeseries_aggregations'] = {
+      transformers.timeseries_aggregations = {
         description: 'Time series aggregations',
         getColumns: function getColumns() {
           return [{ text: 'Avg', value: 'avg' }, { text: 'Min', value: 'min' }, { text: 'Max', value: 'max' }, { text: 'Total', value: 'total' }, { text: 'Current', value: 'current' }, { text: 'Count', value: 'count' }];
@@ -139,7 +139,7 @@ System.register(['lodash', 'app/core/utils/flatten', 'app/core/time_series2', 'a
         }
       };
 
-      transformers['annotations'] = {
+      transformers.annotations = {
         description: 'Annotations',
         getColumns: function getColumns() {
           return [];
@@ -161,7 +161,7 @@ System.register(['lodash', 'app/core/utils/flatten', 'app/core/time_series2', 'a
         }
       };
 
-      transformers['table'] = {
+      transformers.table = {
         description: 'Table',
         getColumns: function getColumns(data) {
           if (!data || data.length === 0) {
@@ -199,9 +199,10 @@ System.register(['lodash', 'app/core/utils/flatten', 'app/core/time_series2', 'a
             return d.type !== 'table';
           });
           if (noTableIndex > -1) {
-            throw {
+            var err = {
               message: 'Result of query #' + String.fromCharCode(65 + noTableIndex) + ' is not in table format, try using another transform.'
             };
+            throw err;
           }
 
           // mergeTablesIntoModel(model, ...data);
@@ -211,7 +212,7 @@ System.register(['lodash', 'app/core/utils/flatten', 'app/core/time_series2', 'a
         }
       };
 
-      transformers['json'] = {
+      transformers.json = {
         description: 'JSON Data',
         getColumns: function getColumns(data) {
           if (!data || data.length === 0) {
@@ -253,10 +254,10 @@ System.register(['lodash', 'app/core/utils/flatten', 'app/core/time_series2', 'a
             for (var _iterator = panel.columns[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
               var column = _step.value;
 
-              var tableCol = { text: column.text };
+              var tableCol = { text: column.text
 
-              // if filterable data then set columns to filterable
-              if (data.length > 0 && data[0].filterable) {
+                // if filterable data then set columns to filterable
+              };if (data.length > 0 && data[0].filterable) {
                 tableCol.filterable = true;
               }
 

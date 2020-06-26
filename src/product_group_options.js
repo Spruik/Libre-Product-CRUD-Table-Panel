@@ -2,7 +2,6 @@ import * as utils from './utils'
 import * as productGroup from './product_group_form'
 
 const preprocess = scope => {
-
   scope.productGroupOptionsModal = {}
 
   scope.productGroupOptionsModal.onUpdateClick = () => {

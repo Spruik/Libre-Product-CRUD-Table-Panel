@@ -1,0 +1,39 @@
+version: '3.6'
+
+x-common-postgres-variables: &common-postgres-variables
+  POSTGRES_USER: postgres
+  POSTGRES_PASSWORD: mysecretpassword
+  
+x-common-influx-variables: &common-influx-variables
+  INFLUXDB_DB: smart_factory
+  INFLUXDB_USER: admin
+  INFLUXDB_USER_PASSWORD: admin
+
+services:
+  grafana:
+    image: spruiktec/libre-grafana
+    ports:
+      - 3000:3000
+    volumes:
+      - ./dist:/var/lib/grafana/plugins/libre-product-crud-table-panel:ro
+    environment: 
+      <<: *common-postgres-variables
+      <<: *common-influx-variables
+    depends_on: 
+      - postrest
+  postrest:
+    image: postgrest/postgrest
+    ports: 
+      - 5436:3000
+    environment:
+      - PGRST_DB_URI=postgres://postgres:mysecretpassword@postgres/smartfactory
+      - PGRST_DB_ANON_ROLE=postgres
+    depends_on: 
+      - postgres
+  simulator:
+    image: spruiktec/libre-simulator
+    depends_on: 
+      - postrest
+  postgres:
+    image: spruiktec/libre-postgres
+    environment: *common-postgres-variables

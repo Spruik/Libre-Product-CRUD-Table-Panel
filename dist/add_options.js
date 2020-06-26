@@ -14,7 +14,6 @@ System.register(['./utils', './product_group_form', './product_form'], function 
     }],
     execute: function () {
       preprocess = function preprocess(scope) {
-
         scope.addOptionsModal = {};
 
         scope.addOptionsModal.onProductGroupClick = function () {

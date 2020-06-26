@@ -113,14 +113,14 @@ System.register(['lodash', 'jquery', 'app/plugins/sdk', './transformers', './edi
           pattern: 'Time',
           alias: 'Time',
           dateFormat: 'YYYY-MM-DD HH:mm:ss',
-          headerColor: "rgba(51, 181, 229, 1)"
+          headerColor: 'rgba(51, 181, 229, 1)'
         }, {
           unit: 'short',
           type: 'number',
           alias: '',
           decimals: 2,
-          headerColor: "rgba(51, 181, 229, 1)",
-          colors: ["rgba(245, 54, 54, 0.9)", "rgba(237, 129, 40, 0.89)", "rgba(50, 172, 45, 0.97)"],
+          headerColor: 'rgba(51, 181, 229, 1)',
+          colors: ['rgba(245, 54, 54, 0.9)', 'rgba(237, 129, 40, 0.89)', 'rgba(50, 172, 45, 0.97)'],
           colorMode: null,
           pattern: '/.*/',
           thresholds: []
@@ -171,10 +171,9 @@ System.register(['lodash', 'jquery', 'app/plugins/sdk', './transformers', './edi
               }
             });
 
-            var idIndex = $scope.ctrl.colDimensions.indexOf("id");
+            var idIndex = $scope.ctrl.colDimensions.indexOf('id');
             if (!~idIndex) {
               utils.alert('error', 'Error', 'Get not get this product from the database because PRODUCT ID NOT FOUND, please contact the dev team or try to NOT hide the product id column');
-              return;
             } else {
               $scope.ctrl.currentProduct = utils.findProductById($scope.ctrl.products, rowData[idIndex])[0];
               product.showProductOptionsModal($scope.ctrl);
@@ -214,14 +213,13 @@ System.register(['lodash', 'jquery', 'app/plugins/sdk', './transformers', './edi
           }
         }, {
           key: 'onDataError',
-          value: function onDataError(err) {
+          value: function onDataError() {
             this.dataRaw = [];
             this.render();
           }
         }, {
           key: 'onDataReceived',
           value: function onDataReceived(dataList) {
-
             if (dataList.length === 0 || dataList === null || dataList === undefined) {
               return;
             }
@@ -431,7 +429,7 @@ System.register(['lodash', 'jquery', 'app/plugins/sdk', './transformers', './edi
               var height = parseInt(getTableHeight().split('px')[0]) - 38 + 'px';
               rootElem.css({ 'max-height': panel.scroll ? height : '' });
 
-              // get current table column dimensions 
+              // get current table column dimensions
               if (ctrl.table.columns) {
                 ctrl.colDimensions = ctrl.table.columns.filter(function (x) {
                   return !x.hidden;
@@ -482,7 +480,7 @@ System.register(['lodash', 'jquery', 'app/plugins/sdk', './transformers', './edi
 
       _export('TableCtrl', TableCtrl);
 
-      TableCtrl.templateUrl = './partials/module.html';
+      TableCtrl.templateUrl = 'public/plugins/libre-product-crud-table-panel/partials/module.html';
     }
   };
 });
