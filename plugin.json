@@ -20,12 +20,11 @@
     },
     "screenshots": [
       {"name": "Panel", "url":"public/plugins/libre-product-crud-table-panel/docs/libre-product-crud-table-panel.png"},
-      {"name": "Product Actions", "url":"public/plugins/libre-product-crud-table-panel/docs/libre-product-crud-table-panel-actions.png"},
-      {"name": "Adds", "url":"public/plugins/libre-product-crud-table-panel/docs/libre-product-crud-table-panel-add.png"},
-      {"name": "Add Product", "url":"public/plugins/libre-product-crud-table-panel/docs/libre-product-crud-table-panel-add.png"},
-      {"name": "Add Product Group", "url":"public/plugins/libre-product-crud-table-panel/docs/libre-product-crud-table-panel-add.png"},
-      {"name": "Panel Metrics", "url":"public/plugins/libre-product-crud-table-panel/docs/libre-product-crud-table-panel-metrics.png"},
-      {"name": "Product Search", "url":"public/plugins/libre-product-crud-table-panel/docs/libre-product-crud-table-panel-search.png"}
+      {"name": "Add", "url":"public/plugins/libre-product-crud-table-panel/docs/libre-product-crud-table-panel-add.png"},
+      {"name": "Product Add", "url":"public/plugins/libre-product-crud-table-panel/docs/libre-product-crud-table-panel-product-add.png"},
+      {"name": "Product Group Update", "url":"public/plugins/libre-product-crud-table-panel/docs/libre-product-crud-table-panel-product-group-update.png"},
+      {"name": "Product Actions", "url":"public/plugins/libre-product-crud-table-panel/docs/libre-product-crud-table-panel-product-actions.png"},
+      {"name": "Panel Metrics", "url":"public/plugins/libre-product-crud-table-panel/docs/libre-product-crud-table-panel-metrics.png"}
     ],
     "version": "1.0.0",
     "updated": "2020-06-26"
