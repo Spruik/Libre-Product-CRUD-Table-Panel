@@ -248,6 +248,8 @@ For any issue, there are fundamentally three ways an individual can contribute:
 ## Change log
 
 - 1.0.1 Documentation Updates
-  - Fix subtitle & paths in README
+  - Fix paths, shell output & subtitle
+  - Remove unused reference
+  - Remove unused grunt config
 
 - 1.0.0 Initial Public Release
