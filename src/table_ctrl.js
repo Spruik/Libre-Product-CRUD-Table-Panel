@@ -49,7 +49,6 @@ export class TableCtrl extends MetricsPanelCtrl {
     super($scope, $injector)
 
     this.pageIndex = 0
-    const ctrl = this
 
     if (this.panel.styles === void 0) {
       this.panel.styles = this.panel.columns
