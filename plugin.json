@@ -26,8 +26,8 @@
       {"name": "Product Actions", "url":"public/plugins/libre-product-crud-table-panel/docs/libre-product-crud-table-panel-product-actions.png"},
       {"name": "Panel Metrics", "url":"public/plugins/libre-product-crud-table-panel/docs/libre-product-crud-table-panel-metrics.png"}
     ],
-    "version": "1.0.1",
-    "updated": "2020-06-26"
+    "version": "1.0.2",
+    "updated": "2020-08-06"
   },
   "dependencies": {
     "grafanaVersion": "6.x.x",
