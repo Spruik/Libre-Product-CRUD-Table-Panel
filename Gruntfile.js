@@ -1,16 +1,17 @@
 module.exports = function (grunt) {
   require('load-grunt-tasks')(grunt)
 
-  grunt.loadNpmTasks('grunt-execute')
+  grunt.loadNpmTasks('grunt-contrib-compress')
+  grunt.loadNpmTasks('grunt-contrib-copy')
+  grunt.loadNpmTasks('grunt-contrib-watch')
   grunt.loadNpmTasks('grunt-contrib-clean')
-  grunt.loadNpmTasks('grunt-multi-dest')
   grunt.loadNpmTasks('grunt-babel')
-  grunt.loadNpmTasks('grunt-force-task')
+  grunt.loadNpmTasks('grunt-string-replace')
   grunt.loadNpmTasks('grunt-contrib-jshint')
 
   grunt.initConfig({
     pkg: grunt.file.readJSON('package.json'),
-    clean: ['dist', 'libre-product-crud-table-panel.zip'],
+    clean: ['dist', 'libre-product-crud-table-panel.zip', 'libre-product-crud-table-panel.tar.gz'],
 
     jshint: {
       options: {
@@ -87,6 +88,14 @@ module.exports = function (grunt) {
         expand: true,
         cwd: 'dist/',
         src: ['**/*']
+      },
+      tar: {
+        options: {
+          archive: 'libre-product-crud-table-panel.tar.gz'
+        },
+        expand: true,
+        cwd: 'dist/',
+        src: ['**/*']
       }
     }
   })
@@ -100,6 +109,7 @@ module.exports = function (grunt) {
   grunt.registerTask('build', [
     'clean',
     'default',
-    'compress'
+    'compress:main',
+    'compress:tar'
   ])
 }
