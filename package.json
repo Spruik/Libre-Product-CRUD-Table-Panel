@@ -1,6 +1,6 @@
 {
   "name": "libre-product-crud-table-panel",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "Libre Grafana panel for Create, Read, Update and Delete of Products and Product Groups",
   "homepage": "https://github.com/Spruik/Libre-Product-CRUD-Table-Panel",
   "repository": {
