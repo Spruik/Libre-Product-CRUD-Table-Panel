@@ -12,8 +12,8 @@ Products have four properties.
 
 1. id - Name of the product _required, limited to 20 characters_
 2. ingredient - JSON Blob of the ingredients _required_
-3. product_group - Name of the associated product group _reuqired, limited to 50 characters_
-4. prodct_desc - Description of the product _required, limited to 50 characters_
+3. product_group - Name of the associated product group _required, limited to 50 characters_
+4. product_desc - Description of the product _required, limited to 50 characters_
 
 ![Products Panel](./docs/libre-product-crud-table-panel.gif)
 
@@ -88,7 +88,7 @@ Use the boxes icon at the top right of the panel and select Remove. Use the drop
 
 #### Adding
 
-Use the + icon and select Product. With the dialog select a product group from the drop down, provide an product id (number) and a description. In the next section use the drop down to select an operation, the type-ahead to select a material and provide weights. Use the _Add +_ heading to consecuatively add in operations, materials and weights.
+Use the + icon and select Product. With the dialog select a product group from the drop down, provide an product id (number) and a description. In the next section use the drop down to select an operation, the type-ahead to select a material and provide weights. Use the _Add +_ heading to consecutively add in operations, materials and weights.
 Once all operations for the product are added, provide a comment and submit.
 
 #### Update
@@ -97,7 +97,7 @@ Click an existing product so show the actions popup. Select Update, make changes
 
 #### Deleting
 
-Click an existing product to show the actions popop. Select delete.
+Click an existing product to show the actions popup. Select delete.
 
 #### Filter
 
@@ -250,6 +250,10 @@ For any issue, there are fundamentally three ways an individual can contribute:
 - By helping to resolve the issue: Typically, this is done either in the form of demonstrating that the issue reported is not a problem after all, or more often, by opening a Pull Request that changes some bit of something in the panel in a concrete and reviewable manner.
 
 ## Change log
+
+- 1.0.3 Security Update
+  - Update bl library >=1.2.3
+  - Bump Revision
 
 - 1.0.2 Add tar build output
   - Remove unused libraries
