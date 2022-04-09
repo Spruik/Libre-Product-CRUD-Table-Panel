@@ -24,7 +24,7 @@
   ],
   "dependencies": {
     "lodash": "^4.17.19",
-    "moment": "^2.12.0"
+    "moment": "^2.29.2"
   },
   "devDependencies": {
     "babel-preset-es2015": "^6.5.0",
